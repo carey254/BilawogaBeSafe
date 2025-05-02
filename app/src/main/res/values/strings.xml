@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Bila woga</string>
+    <string name="enter_number_to_nsend_sms_nin_nemergency">Enter Number To\nSend SMS\nin\nEMERGENCY!</string>
+    <string name="stop">Stop</string>
+    <string name="start">Start</string>
+    <string name="sos_will_be_sent_to_n">SOS Will Be Sent To\n</string>
+    <string name="send_emergency_alert">Send Emergency Alert</string>
+    <string name="optional_enter_an_emergency_contact">Optional: Enter an emergency contact</string>
+    <string name="Start">Start</string>
+    <string name="Stop">Stop</string>
+    <string name="send_emergencyalert">Send Emergency Alert</string>
+    <string name="Send_Emergency_Alert">Send Emergency Alert</string>
+</resources>

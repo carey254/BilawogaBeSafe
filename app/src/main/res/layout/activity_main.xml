@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".ServiceMine">
+
+    <View
+        android:id="@+id/moreOptionsView"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:onClick="showChangeNumberMenu"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_margin="20dp"
+        android:background="@drawable/ic_baseline_more_vert_24" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        tools:ignore="ExtraText">
+
+        <TextView
+            android:id="@+id/textNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:text="@string/sos_will_be_sent_to_n"
+            android:layout_centerHorizontal="true" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/start"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_below="@id/textNum"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/start"
+            android:textColor="@color/white"
+            android:backgroundTint="#261313"
+            app:cornerRadius="10dp"
+            android:onClick="startServiceV" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/stop"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_below="@id/start"
+            android:text="@string/stop"
+            android:textColor="@color/black"
+            android:backgroundTint="#ffffff"
+            app:cornerRadius="10dp"
+            android:onClick="stopService" />
+
+        <!-- Button is hidden at first -->
+        <Button
+            android:id="@+id/btn_send_sos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Send_Emergency_Alert"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            android:onClick="sendSOS"
+            tools:ignore="OnClick" />
+
+
+
+    </RelativeLayout>
+</RelativeLayout>

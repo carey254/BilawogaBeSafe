@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".RegisterNumberActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingTop="80dp"
+        android:paddingBottom="80dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp">
+
+        <!-- Text View Header -->
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enter_number_to_nsend_sms_nin_nemergency"
+            android:textSize="19sp"
+            android:fontFamily="@font/varela_round"
+            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:gravity="center"/>
+
+        <!-- Name Input Field -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nameEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Your Name"
+                android:inputType="textPersonName"
+                android:fontFamily="@font/varela_round"
+                android:textAlignment="center"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Emergency Number Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/numberEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Emergency Number"
+                android:inputType="phone"
+                android:maxLength="12"
+                android:fontFamily="@font/varela_round"
+                android:textAlignment="center"
+                tools:ignore="HardcodedText"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Incident Type Spinner -->
+        <Spinner
+            android:id="@+id/incidentSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:minHeight="48dp" />
+
+        <!-- Manual Incident Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/manualIncidentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/manualIncidentEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Or type your emergency"
+                android:inputType="text"
+                android:fontFamily="@font/varela_round"
+                android:textAlignment="center"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Save Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/saveButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:backgroundTint="#ffffff"
+            android:fontFamily="@font/varela_round"
+            android:onClick="saveNumber"
+            android:text="Finish"
+            android:textColor="@color/black"
+            app:cornerRadius="10dp"/>
+
+    </LinearLayout>
+</ScrollView>

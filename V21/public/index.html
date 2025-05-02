@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mental Health Chatbot for GBV survivors and stress management">
+  <title>Mental Health Chatbot</title>
+  <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+  <style>
+    /* Add some basic styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f9;
+    }
+
+    #chatbot {
+      width: 400px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      background: white;
+    }
+
+    .message {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 10px;
+      max-width: 70%;
+    }
+
+    .user {
+      align-self: flex-end;
+      background-color: #4a90e2;
+      color: white;
+    }
+
+    .bot {
+      align-self: flex-start;
+      background-color: #e0e0e0;
+      color: #333;
+    }
+
+    #input-area {
+      display: flex;
+      border-top: 1px solid #ddd;
+      padding: 5px;
+    }
+
+    #input-area input {
+      flex-grow: 1;
+      padding: 10px;
+      border: none;
+      outline: none;
+    }
+
+    #input-area button {
+      padding: 10px;
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script>
+    const { useState } = React;
+
+    function Chatbot() {
+      const [messages, setMessages] = useState([]);
+      const [input, setInput] = useState("");
+
+      const sendMessage = () => {
+        if (input.trim()) {
+          setMessages([...messages, { text: input, user: "User" }]);
+          setTimeout(() => {
+            setMessages((prev) => [
+              ...prev,
+              { text: "How can I help you today?", user: "Bot" },
+            ]);
+          }, 1000);
+          setInput("");
+        }
+      };
+
+      return React.createElement(
+        "div",
+        { id: "chatbot" },
+        React.createElement(
+          "div",
+          { className: "messages", style: { padding: "10px", overflowY: "auto", height: "400px" } },
+          messages.map((msg, index) =>
+            React.createElement(
+              "div",
+              { className: `message ${msg.user.toLowerCase()}` },
+              msg.text
+            )
+          )
+        ),
+        React.createElement(
+          "div",
+          { id: "input-area" },
+          React.createElement("input", {
+            type: "text",
+            value: input,
+            onChange: (e) => setInput(e.target.value),
+            placeholder: "Type your message...",
+          }),
+          React.createElement(
+            "button",
+            { onClick: sendMessage },
+            "Send"
+          )
+        )
+      );
+    }
+
+    ReactDOM.render(
+      React.createElement(Chatbot),
+      document.getElementById("root")
+    );
+  </script>
+</body>
+</html>

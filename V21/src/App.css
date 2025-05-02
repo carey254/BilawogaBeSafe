@@ -1,0 +1,21 @@
+/* Styles for the main application container */
+.app {
+  font-family: Arial, sans-serif; /* Ensures a clean and readable font */
+  text-align: center; /* Centers text content */
+  padding: 20px; /* Adds spacing around the content */
+  background-color: #f5f5f5; /* Light grey background for a soothing effect */
+  height: 100vh; /* Ensures the app fills the entire viewport height */
+  display: flex; /* Enables flexbox for layout management */
+  flex-direction: column; /* Arranges children vertically */
+  justify-content: center; /* Centers content vertically */
+  align-items: center; /* Centers content horizontally */
+  margin: 0; /* Removes default margin for consistency */
+  overflow: hidden; /* Prevents scrollbars from appearing unnecessarily */
+}
+
+/* Add styles for responsiveness */
+@media (max-width: 768px) {
+  .app {
+    padding: 10px; /* Reduces padding on smaller screens */
+  }
+}
