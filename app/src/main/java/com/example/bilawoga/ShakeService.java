@@ -8,12 +8,16 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+// import android.telephony.SmsManager; // Removed: Using Intent-based SMS instead
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
+import com.example.bilawoga.utils.SOSHelper;
+
+import com.example.bilawoga.utils.SecureStorageManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
@@ -27,7 +31,7 @@ public class ShakeService implements SensorEventListener {
     private final SensorManager sensorManager;
     private final Sensor accelerometer;
     private final FusedLocationProviderClient fusedLocationClient;
-    private final SmsManager smsManager;
+    // private final SmsManager smsManager; // Removed: Using Intent-based SMS instead
     private final Context context;
     private String myLocation = "Location not available";
 
@@ -42,7 +46,7 @@ public class ShakeService implements SensorEventListener {
         }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-        smsManager = SmsManager.getDefault();
+        // smsManager = SmsManager.getDefault(); // Removed: Using Intent-based SMS instead
     }
 
     public void startListening() {
@@ -88,61 +92,35 @@ public class ShakeService implements SensorEventListener {
     }
 
     private void sendSOS() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
-        String emergencyNumber = sharedPreferences.getString("ENUM", "NONE");
+        SharedPreferences sharedPreferences = SecureStorageManager.getEncryptedSharedPreferences(context);
+        String userName = sharedPreferences.getString("USERNAME", "Unknown User");
+        String incidentType = sharedPreferences.getString("INCIDENT_TYPE", "Unspecified Emergency");
 
-        if (emergencyNumber.equalsIgnoreCase("NONE")) {
-            Log.e("ShakeService", "Emergency number not set!");
-            Toast.makeText(context, "Emergency number not set!", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
-            Log.d("ShakeService", "SMS permission granted. Proceeding to get location and send SMS.");
-            getLastLocationAndSendSMS(emergencyNumber);
-        } else {
-            Log.e("ShakeService", "SMS permission not granted!");
-            Toast.makeText(context, "SMS permission denied. Cannot send SOS.", Toast.LENGTH_LONG).show();
-        }
+        SOSHelper.sendSOSFromService((ServiceMine) context, fusedLocationClient, userName, incidentType);
     }
 
-    private void getLastLocationAndSendSMS(String emergencyNumber) {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.e("ShakeService", "Location permissions are not granted!");
-            Toast.makeText(context, "Location permission denied.", Toast.LENGTH_LONG).show();
-            return;
-        }
 
-        fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
-            if (location != null) {
-                myLocation = "http://maps.google.com/maps?q=loc:" + location.getLatitude() + "," + location.getLongitude();
-                Log.d("ShakeService", "Location retrieved: " + myLocation);
-            } else {
-                myLocation = "Unable to find location :(";
-                Log.e("ShakeService", "Failed to retrieve location.");
-            }
-            sendSMS(emergencyNumber, myLocation);
-        }).addOnFailureListener(e -> {
-            Log.e("ShakeService", "Location retrieval failed: " + e.getMessage());
-            sendSMS(emergencyNumber, "Unable to retrieve location, but I need help urgently!");
-        });
-    }
 
     private void sendSMS(String emergencyNumber, String locationMessage) {
+        // Deprecated: route all SMS sending through SOSHelper to centralize permission checks
         try {
-            smsManager.sendTextMessage(emergencyNumber, null, locationMessage, null, null);
-            Log.d("ShakeService", "SOS message sent to: " + emergencyNumber);
-            Toast.makeText(context, "SOS sent successfully!", Toast.LENGTH_LONG).show();
+            new com.example.bilawoga.utils.SOSHelper(context).testSMSSending(emergencyNumber);
         } catch (Exception e) {
-            Log.e("ShakeService", "Failed to send SOS message.", e);
-            Toast.makeText(context, "Failed to send SOS!", Toast.LENGTH_LONG).show();
+            Log.e("ShakeService", "Failed to trigger SMS via SOSHelper.", e);
         }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Not used here
+    }
+
+    public String getMyLocation() {
+        return myLocation;
+    }
+
+    public void setMyLocation(String myLocation) {
+        this.myLocation = myLocation;
     }
 
     public interface ShakeListener {

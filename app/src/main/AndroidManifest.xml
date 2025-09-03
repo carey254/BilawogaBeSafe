@@ -3,53 +3,136 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Device Features -->
-    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="false"/>
-    <uses-feature android:name="android.hardware.telephony" android:required="false"/>
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="false"/>
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false"/>
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false"/>
+    <uses-feature
+        android:name="android.hardware.location.network"
+        android:required="false"/>
 
-    <!-- Required Permissions -->
+    <!-- SECURITY FIX: Only essential permissions for emergency functionality -->
+    <!-- Location Permissions - Required for emergency location sharing -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
+    
+    <!-- SMS Permissions - Only send SMS for emergency alerts -->
     <uses-permission android:name="android.permission.SEND_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    
+    <!-- Service Permissions - Required for background shake detection -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-
-    <!-- Handle Scoped Storage -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" tools:ignore="ScopedStorage"/>
+    
+    <!-- Audio Recording Permissions - Required for emergency sound detection -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE"/>
+    
+    <!-- Boot permission for auto-start service -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    
+    <!-- Vibration permission for SOS feedback -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <!-- Internet permission for Firebase backup -->
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/backimage"
-        android:label="SecureHer"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.BilaWoga"
-        tools:targetApi="31">
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:icon="@drawable/logo"
+        android:label="Bila Woga"
+        android:roundIcon="@drawable/logo"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:theme="@style/Theme.BilaWoga">
+        <!-- TODO: Add privacy policy dialog and link in app UI -->
+
+        <!-- Register SMS Receiver -->
+        <receiver
+            android:name=".SMSReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Boot Receiver for auto-start service -->
+        <receiver
+            android:name=".BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
 
         <!-- Splash Screen Activity -->
-        <activity android:name=".SplashScreen" android:exported="false"/>
-
-        <!-- Register Number Activity -->
-        <activity android:name=".RegisterNumberActivity" android:exported="false"/>
-
-        <!-- Main Activity (Launcher) -->
-        <activity android:name=".MainActivity" android:exported="true">
+        <activity
+            android:name=".SplashScreen"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
+        <!-- Main Activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.bilawoga.SMS_SENT" />
+                <action android:name="com.example.bilawoga.SMS_DELIVERED" />
+            </intent-filter>
+        </activity>
+
+        <!-- Countdown Activity -->
+        <activity
+            android:name=".CountdownActivity"
+            android:exported="false" />
+
+        <!-- Register Number Activity -->
+        <activity
+            android:name=".RegisterNumberActivity"
+            android:exported="false">
+        </activity>
+
+        <!-- Select Incident Activity -->
+        <activity
+            android:name=".SelectIncidentActivity"
+            android:exported="false">
+        </activity>
+
+        <!-- Onboarding Activity -->
+        <activity
+            android:name=".OnboardingActivity"
+            android:exported="false">
+        </activity>
+
         <!-- Background Service -->
-        <service android:name=".ServiceMine"
-            android:foregroundServiceType="location"
+        <service
+            android:name=".ServiceMine"
+            android:exported="false">
+        </service>
+
+        <!-- Shake Service -->
+        <service
+            android:name=".ShakeService"
             android:exported="false"/>
+
+        <!-- Background Audio Monitor Service -->
+        <service
+            android:name=".utils.BackgroundAudioMonitor"
+            android:exported="false"
+            android:foregroundServiceType="microphone"/>
+
+        <activity
+            android:name=".utils.PolicyViewerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.BilaWoga" />
     </application>
 </manifest>

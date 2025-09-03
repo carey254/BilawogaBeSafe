@@ -1,0 +1,586 @@
+package com.example.bilawoga.utils;
+
+import android.content.Context;
+import android.telephony.SmsManager;
+import android.util.Log;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import androidx.core.content.ContextCompat;
+import android.Manifest;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import android.location.Location;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
+import android.os.Looper;
+import android.os.Handler;
+import android.widget.Toast;
+import android.content.SharedPreferences;
+
+public class SOSHelper {
+    private static final String TAG = "SOSHelper";
+    private Context context;
+    private FusedLocationProviderClient fusedLocationClient;
+
+    public SOSHelper(Context context) {
+        this.context = context;
+        this.fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+    }
+
+    /**
+     * Send SOS with delivery report - Static method for MainActivity
+     */
+    public static void sendSOSWithDeliveryReport(Context context, FusedLocationProviderClient fusedLocationClient, 
+                                                String userName, String incidentType, String emergencyNumber1, String emergencyNumber2) {
+        SOSHelper sosHelper = new SOSHelper(context);
+        sosHelper.sendEmergencySOSWithDeliveryReport(userName, incidentType, emergencyNumber1, emergencyNumber2);
+    }
+
+    /**
+     * Send emergency SOS message with delivery reports
+     */
+    public void sendEmergencySOSWithDeliveryReport(String userName, String incidentType, String emergencyNumber1, String emergencyNumber2) {
+        if (!isSosAllowed()) {
+            Log.e(TAG, "SOS not allowed - check permissions and settings");
+            return;
+        }
+        
+        // Validate we have at least one emergency number
+        boolean hasValidNumber = (emergencyNumber1 != null && !emergencyNumber1.isEmpty() && !emergencyNumber1.equals("NONE")) ||
+                               (emergencyNumber2 != null && !emergencyNumber2.isEmpty() && !emergencyNumber2.equals("NONE"));
+                               
+        if (!hasValidNumber) {
+            Log.e(TAG, "No valid emergency numbers provided");
+            new Handler(Looper.getMainLooper()).post(() -> 
+                Toast.makeText(context, "No emergency contacts found. Please add emergency contacts in settings.", 
+                    Toast.LENGTH_LONG).show());
+            return;
+        }
+
+        Log.d(TAG, "Starting SOS process with location retrieval...");
+        
+        // Get current location with callback
+        getCurrentLocation((Location location) -> {
+            String locationText;
+            if (location != null) {
+                // Format location as Google Maps URL
+                locationText = String.format(Locale.US, "https://maps.google.com/?q=%.6f,%.6f",
+                    location.getLatitude(), location.getLongitude());
+                Log.d(TAG, "Using location: " + locationText);
+            } else {
+                locationText = "Location unavailable";
+                Log.w(TAG, "Could not get location, sending without it");
+                new Handler(Looper.getMainLooper()).post(() -> 
+                    Toast.makeText(context, "Could not get location. Sending SOS without location...", 
+                        Toast.LENGTH_LONG).show());
+            }
+
+            try {
+                // Create emergency message
+                String emergencyMessage = createEmergencyMessage(userName, incidentType, locationText);
+                Log.d(TAG, "SOS message prepared");
+
+                // Send to emergency contacts with better error handling
+                try {
+                    if (emergencyNumber1 != null && !emergencyNumber1.isEmpty() && !emergencyNumber1.equals("NONE")) {
+                        Log.d(TAG, "Sending to primary contact: " + maskPhoneNumber(emergencyNumber1));
+                        boolean sent = sendSMSWithDeliveryReport(emergencyNumber1, emergencyMessage);
+                        if (!sent) {
+                            showToast("Failed to send to primary contact");
+                        }
+                    } else {
+                        Log.d(TAG, "No primary emergency number provided");
+                        showToast("No primary emergency number set");
+                    }
+
+                    if (emergencyNumber2 != null && !emergencyNumber2.isEmpty() && !emergencyNumber2.equals("NONE")) {
+                        Log.d(TAG, "Sending to secondary contact: " + maskPhoneNumber(emergencyNumber2));
+                        boolean sent = sendSMSWithDeliveryReport(emergencyNumber2, emergencyMessage);
+                        if (!sent) {
+                            showToast("Failed to send to secondary contact");
+                        }
+                    } else {
+                        Log.d(TAG, "No secondary emergency number provided");
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Error sending emergency messages: " + e.getMessage(), e);
+                    showToast("Error sending emergency messages");
+                }
+
+                Log.d(TAG, "Emergency SOS sent to contacts with delivery reports");
+                
+                // Show success message on UI thread
+                new Handler(Looper.getMainLooper()).post(() -> 
+                    Toast.makeText(context, "SOS alert sent to emergency contacts!", 
+                        Toast.LENGTH_LONG).show());
+                        
+            } catch (Exception e) {
+                Log.e(TAG, "Error sending SOS: " + e.getMessage(), e);
+                new Handler(Looper.getMainLooper()).post(() -> 
+                    Toast.makeText(context, "Error sending SOS: " + e.getMessage(), 
+                        Toast.LENGTH_LONG).show());
+            }
+        });
+    }
+
+    /**
+     * Send SMS with delivery report
+     */
+    private boolean sendSMSWithDeliveryReport(String phoneNumber, String message) {
+        boolean[] success = {false};
+        try {
+            // Log the message content
+            Log.d(TAG, "Preparing to send SMS to: " + maskPhoneNumber(phoneNumber));
+            Log.d(TAG, "Message content: " + message);
+            
+            // Validate phone number
+            if (phoneNumber == null || phoneNumber.trim().isEmpty() || phoneNumber.equals("NONE")) {
+                String errorMsg = "Invalid phone number: " + phoneNumber;
+                Log.e(TAG, errorMsg);
+                showToast(errorMsg);
+                return false;
+            }
+            
+            // Clean up phone number (remove any non-digit characters)
+            String cleanNumber = phoneNumber.replaceAll("[^0-9+]", "");
+            if (cleanNumber.isEmpty()) {
+                Log.e(TAG, "Phone number contains no digits: " + phoneNumber);
+                return false;
+            }
+            
+            SmsManager smsManager = SmsManager.getDefault();
+            
+            // Create pending intents for delivery reports
+            // Use unique request codes to prevent intent override
+            int requestCode = (int) System.currentTimeMillis();
+            
+            // For sent status
+            Intent sentIntent = new Intent(com.example.bilawoga.MainActivity.SMS_SENT_ACTION);
+            sentIntent.putExtra("phoneNumber", cleanNumber);
+            PendingIntent sentPI = PendingIntent.getBroadcast(context, requestCode, sentIntent, 
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            
+            // For delivery status
+            Intent deliveredIntent = new Intent(com.example.bilawoga.MainActivity.SMS_DELIVERED_ACTION);
+            deliveredIntent.putExtra("phoneNumber", cleanNumber);
+            PendingIntent deliveredPI = PendingIntent.getBroadcast(context, requestCode + 1, 
+                    deliveredIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            
+            // Split long messages
+            ArrayList<String> parts = smsManager.divideMessage(message);
+            
+            if (parts.size() > 1) {
+                // For multipart messages
+                ArrayList<PendingIntent> sentIntents = new ArrayList<>();
+                ArrayList<PendingIntent> deliveryIntents = new ArrayList<>();
+                for (int i = 0; i < parts.size(); i++) {
+                    sentIntents.add(PendingIntent.getBroadcast(context, requestCode + i, 
+                            new Intent(com.example.bilawoga.MainActivity.SMS_SENT_ACTION).putExtra("phoneNumber", cleanNumber), 
+                            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
+                    deliveryIntents.add(PendingIntent.getBroadcast(context, requestCode + i + 1000, 
+                            new Intent(com.example.bilawoga.MainActivity.SMS_DELIVERED_ACTION).putExtra("phoneNumber", cleanNumber), 
+                            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
+                }
+                
+                try {
+                    // Log each part of the message
+                    for (int i = 0; i < parts.size(); i++) {
+                        Log.d(TAG, String.format("Message part %d/%d: %s", i + 1, parts.size(), parts.get(i)));
+                    }
+                    
+                    // Send multipart message
+                    smsManager.sendMultipartTextMessage(cleanNumber, null, parts, sentIntents, deliveryIntents);
+                    Log.d(TAG, "Multipart SMS sent to: " + maskPhoneNumber(cleanNumber) + " (" + parts.size() + " parts)");
+                    success[0] = true;
+                } catch (IllegalArgumentException e) {
+                    Log.e(TAG, "Invalid destination address: " + cleanNumber, e);
+                    showToast("Invalid phone number: " + cleanNumber);
+                } catch (SecurityException e) {
+                    Log.e(TAG, "SMS permission denied", e);
+                    showToast("SMS permission denied. Please check app permissions.");
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to send SMS", e);
+                    showToast("Failed to send SMS: " + e.getMessage());
+                }
+            } else {
+                try {
+                    // Log single part message
+                    Log.d(TAG, "Sending single part message: " + message);
+                    
+                    // Single part message
+                    smsManager.sendTextMessage(cleanNumber, null, message, sentPI, deliveredPI);
+                    Log.d(TAG, "SMS sent to: " + maskPhoneNumber(cleanNumber) + " (single part)");
+                    success[0] = true;
+                } catch (IllegalArgumentException e) {
+                    Log.e(TAG, "Invalid destination address: " + cleanNumber, e);
+                    showToast("Invalid phone number: " + cleanNumber);
+                } catch (SecurityException e) {
+                    Log.e(TAG, "SMS permission denied", e);
+                    showToast("SMS permission denied. Please check app permissions.");
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to send SMS", e);
+                    showToast("Failed to send SMS: " + e.getMessage());
+                }
+            }
+            
+        } catch (SecurityException se) {
+            Log.e(TAG, "SMS permission denied: " + se.getMessage());
+            // Show a toast on the UI thread
+            new Handler(Looper.getMainLooper()).post(() -> 
+                Toast.makeText(context, "SMS permission denied. Please grant SMS permission in app settings.", 
+                    Toast.LENGTH_LONG).show());
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to send SMS to " + maskPhoneNumber(phoneNumber) + ": " + e.getMessage(), e);
+            // Show a toast on the UI thread
+            new Handler(Looper.getMainLooper()).post(() -> 
+                Toast.makeText(context, "Failed to send SMS: " + e.getMessage(), 
+                    Toast.LENGTH_LONG).show());
+        }
+        return success[0];
+    }
+
+    /**
+     * Send emergency SOS message
+     */
+    public void sendEmergencySOS(String userName, String incidentType, String emergencyNumber1, String emergencyNumber2) {
+        if (!isSosAllowed()) {
+            Log.d(TAG, "SOS not allowed due to rate limiting");
+            showToast("Please wait before sending another SOS");
+            return;
+        }
+        
+        // Show initial message
+        showToast("Getting your location...");
+        
+        // Get current location
+        getCurrentLocation((Location location) -> {
+            String locationText = location != null ? 
+                String.format("%.6f, %.6f", location.getLatitude(), location.getLongitude()) : 
+                "Location unavailable";
+
+            // Create emergency message
+            String emergencyMessage = createEmergencyMessage(userName, incidentType, locationText);
+            boolean messageSent = false;
+
+            // Send to both emergency contacts
+            if (emergencyNumber1 != null && !emergencyNumber1.isEmpty() && !emergencyNumber1.equals("NONE")) {
+                sendSMS(emergencyNumber1, emergencyMessage);
+                messageSent = true;
+            }
+
+            if (emergencyNumber2 != null && !emergencyNumber2.isEmpty() && !emergencyNumber2.equals("NONE")) {
+                sendSMS(emergencyNumber2, emergencyMessage);
+                messageSent = true;
+            }
+
+            if (messageSent) {
+                Log.d(TAG, "Emergency SOS sent to contacts");
+                showToast("SOS sent with your location");
+                logSosEvent("manual_sos", true);
+            } else {
+                Log.e(TAG, "No valid emergency contacts found");
+                showToast("No valid emergency contacts found");
+            }
+        });
+    }
+
+    /**
+     * Get current location with timeout and fallback to last known location
+     */
+    private void getCurrentLocation(LocationResultCallback callback) {
+        // Check if we have location permission
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) 
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "Location permission not granted");
+            callback.onLocationReceived(null);
+            return;
+        }
+
+        // Show toast on UI thread
+        new Handler(Looper.getMainLooper()).post(() -> 
+            Toast.makeText(context, "Fetching your location for SOS...", Toast.LENGTH_SHORT).show());
+
+        // Try to get last known location first (fastest option)
+        try {
+            fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(location -> {
+                    if (location != null) {
+                        Log.d(TAG, "Got last known location: " + location.getLatitude() + ", " + location.getLongitude());
+                        callback.onLocationReceived(location);
+                    } else {
+                        requestFreshLocation(callback);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Failed to get last known location: " + e.getMessage());
+                    requestFreshLocation(callback);
+                });
+        } catch (SecurityException e) {
+            Log.e(TAG, "SecurityException when getting location: " + e.getMessage());
+            callback.onLocationReceived(null);
+        }
+    }
+
+    /**
+     * Request fresh location updates with timeout
+     */
+    private void requestFreshLocation(LocationResultCallback callback) {
+        // Double-check location permission
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) 
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "Location permission not granted for fresh location");
+            callback.onLocationReceived(null);
+            return;
+        }
+
+        // Create location request
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(5000); // 5 seconds
+        locationRequest.setFastestInterval(2000); // 2 seconds
+        locationRequest.setNumUpdates(1);
+        locationRequest.setExpirationDuration(10000); // 10 seconds timeout
+
+        final Handler handler = new Handler(Looper.getMainLooper());
+        
+        // Create timeout runnable
+        final Runnable timeoutRunnable = () -> {
+            Log.w(TAG, "Location request timed out");
+            new Handler(Looper.getMainLooper()).post(() -> 
+                Toast.makeText(context, "Could not get precise location. Sending without location...", 
+                    Toast.LENGTH_SHORT).show());
+            callback.onLocationReceived(null);
+        };
+
+        // Create location callback
+        LocationCallback locationCallback = 
+            new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    handler.removeCallbacks(timeoutRunnable);
+                    if (locationResult != null && locationResult.getLastLocation() != null) {
+                        Location location = locationResult.getLastLocation();
+                        Log.d(TAG, "Got fresh location: " + location.getLatitude() + 
+                              ", " + location.getLongitude());
+                        callback.onLocationReceived(location);
+                    } else {
+                        Log.w(TAG, "No location from location result");
+                        callback.onLocationReceived(null);
+                    }
+                }
+            };
+
+        try {
+            // Set timeout for location request
+            handler.postDelayed(timeoutRunnable, 10000); // 10 seconds timeout
+            
+            // Request location updates
+            fusedLocationClient.requestLocationUpdates(locationRequest, 
+                locationCallback, Looper.getMainLooper());
+                
+        } catch (SecurityException e) {
+            Log.e(TAG, "SecurityException when requesting location updates: " + e.getMessage());
+            handler.removeCallbacks(timeoutRunnable);
+            callback.onLocationReceived(null);
+        } catch (Exception e) {
+            Log.e(TAG, "Error requesting location updates: " + e.getMessage());
+            handler.removeCallbacks(timeoutRunnable);
+            callback.onLocationReceived(null);
+        }
+    }
+
+    /**
+     * Create emergency message
+     */
+    private String createEmergencyMessage(String userName, String incidentType, String location) {
+        // Format the message exactly as requested by the user
+        String message = "🚨 EMERGENCY ALERT 🚨\n\n";
+        message += "My name is " + (userName != null ? userName : "a BilaWoga user") + ".\n";
+        message += "I am experiencing " + (incidentType != null ? incidentType : "an emergency") + "\n\n";
+        
+        // Extract coordinates from location URL if available
+        String coordinates = "Unknown location";
+        if (location != null && location.contains("q=")) {
+            coordinates = location.substring(location.indexOf("q=") + 2);
+            // Create a more reliable Google Maps link
+            location = "https://www.google.com/maps?q=" + coordinates;
+        }
+        
+        message += "📍 LOCATION DETAILS:\n";
+        message += "Coordinates: " + coordinates + "\n\n";
+        message += "📍 Track my location here: " + location + "\n\n";
+        message += "PLEASE SEND HELP IMMEDIATELY::";
+        
+        return message;
+    }
+
+    /**
+     * Send SMS message
+     */
+    private void sendSMS(String phoneNumber, String message) {
+        try {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+            Log.d(TAG, "SMS sent to: " + phoneNumber);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to send SMS: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Mask phone number for logging
+     */
+    private String maskPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null || phoneNumber.length() < 4) {
+            return "***";
+        }
+        return phoneNumber.substring(0, 2) + "***" + phoneNumber.substring(phoneNumber.length() - 2);
+    }
+
+    /**
+     * Location callback interface
+     */
+    private interface LocationResultCallback {
+        void onLocationReceived(Location location);
+    }
+    
+    /**
+     * Send SOS from service (static method for services)
+     */
+    public static void sendSOSFromService(Context context, FusedLocationProviderClient fusedLocationClient, String userName, String incidentType) {
+        SOSHelper sosHelper = new SOSHelper(context);
+        sosHelper.sendEmergencySOS(userName, incidentType, "NONE", "NONE");
+    }
+
+    private boolean isSosAllowed() {
+        // For now, always allow SOS for testing purposes
+        // TODO: Re-enable rate limiting before production release
+        return true;
+        
+        /*
+        try {
+            SharedPreferences prefs = com.example.bilawoga.utils.SecureStorageManager.getEncryptedSharedPreferences(context);
+            if (prefs == null) {
+                Log.e(TAG, "Failed to get encrypted preferences");
+                return true; // Allow if we can't check
+            }
+            
+            long now = System.currentTimeMillis();
+            String raw = prefs.getString("SOS_TIMESTAMPS", "");
+            String[] parts = raw.isEmpty() ? new String[0] : raw.split(",");
+            
+            java.util.List<Long> timestamps = new java.util.ArrayList<>();
+            for (String p : parts) {
+                try { 
+                    timestamps.add(Long.parseLong(p)); 
+                } catch (Exception e) { 
+                    Log.w(TAG, "Invalid timestamp in SOS_TIMESTAMPS: " + p);
+                }
+            }
+            
+            // Remove old timestamps (older than 1 hour for testing, change to 24h for production)
+            java.util.List<Long> recent = new java.util.ArrayList<>();
+            for (Long t : timestamps) {
+                if (now - t < 1L*60*60*1000) { // 1 hour for testing
+                    recent.add(t);
+                }
+            }
+            
+            // Log current rate limiting status
+            Log.d(TAG, "SOS rate limit check - Recent count: " + recent.size() + 
+                  ", Last 5 mins: " + getCountInLastMinutes(recent, now, 5) +
+                  ", Last hour: " + getCountInLastMinutes(recent, now, 60));
+            
+            // Check rate limits (increased for testing)
+            if (getCountInLastMinutes(recent, now, 5) >= 10) { // 10 per 5 minutes for testing
+                logSosEvent("RATE_LIMIT_5MIN", false);
+                showToast("Please wait a moment before sending another SOS (5-min limit reached).");
+                return false;
+            }
+            
+            if (recent.size() >= 30) { // 30 per hour for testing
+                logSosEvent("RATE_LIMIT_HOURLY", false);
+                showToast("Please wait before sending another SOS (hourly limit reached).");
+                return false;
+            }
+            
+            // Add this send
+            recent.add(now);
+            StringBuilder sb = new StringBuilder();
+            for (Long t : recent) {
+                if (sb.length() > 0) sb.append(",");
+                sb.append(t);
+            }
+            prefs.edit().putString("SOS_TIMESTAMPS", sb.toString()).apply();
+            return true;
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Rate limit check failed: " + e.getMessage(), e);
+            return true; // fail open - allow if there's an error
+        }
+        */
+    }
+
+    /**
+     * Helper method to show toast messages on the UI thread
+     */
+    private void showToast(String message) {
+        new Handler(Looper.getMainLooper()).post(() -> 
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        );
+    }
+
+    /**
+     * Counts how many timestamps fall within the last N minutes
+     */
+    private int getCountInLastMinutes(List<Long> timestamps, long currentTime, int minutes) {
+        if (timestamps == null || timestamps.isEmpty()) return 0;
+        
+        long timeThreshold = currentTime - (minutes * 60 * 1000L);
+        int count = 0;
+        
+        for (Long timestamp : timestamps) {
+            if (timestamp != null && timestamp >= timeThreshold) {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+
+    private void logSosEvent(String type, boolean success) {
+        try {
+            SharedPreferences prefs = SecureStorageManager.getEncryptedSharedPreferences(context);
+            if (prefs != null) {
+                String log = prefs.getString("USER_ACTIVITY_LOG", "");
+                // Keep log size manageable (last 100 entries)
+                if (log.length() > 10000) {
+                    String[] entries = log.split("\n");
+                    int startIdx = Math.max(0, entries.length - 100);
+                    log = String.join("\n", Arrays.copyOfRange(entries, startIdx, entries.length));
+                }
+                
+                String entry = String.format("%s | SOS | %s | %s\n",
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()),
+                    type,
+                    success ? "SUCCESS" : "FAIL");
+                
+                prefs.edit().putString("USER_ACTIVITY_LOG", log + entry).apply();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to log SOS event: " + e.getMessage());
+        }
+    }
+}

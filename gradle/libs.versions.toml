@@ -1,5 +1,5 @@
 [versions]
-agp = "8.7.0"
+agp = "8.9.2"
 
 androidxJunit = "1.2.1"
 core = "1.6.1"
@@ -16,6 +16,10 @@ playServicesLocation = "21.3.0"
 playServicesMaps = "19.0.0"
 shakeDetector = "0.0.1"
 monitor = "1.7.2"
+firebaseCrashlytics = "19.4.4"
+googleGmsGoogleServices = "4.4.3"
+googleFirebaseCrashlytics = "3.0.4"
+materialVersion = "1.12.0"
 
 [libraries]
 
@@ -33,7 +37,11 @@ play-services-location = { module = "com.google.android.gms:play-services-locati
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 shake-detector = { module = "com.github.Lucem-Anb:shake-detector", version.ref = "shakeDetector" }
 monitor = { group = "androidx.test", name = "monitor", version.ref = "monitor" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
+google-material = { group = "com.google.android.material", name = "material", version.ref = "materialVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
 

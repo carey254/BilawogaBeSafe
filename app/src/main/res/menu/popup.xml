@@ -4,6 +4,21 @@
         android:id="@+id/action_change_number"
         android:title="Change Number"/>
     <item
+        android:id="@+id/action_privacy_policy"
+        android:title="Privacy Policy"/>
+    <item
+        android:id="@+id/action_terms_of_use"
+        android:title="Terms of Use"/>
+    <item
         android:id="@+id/action_logout"
         android:title="Logout"/>
+    <item
+        android:id="@+id/action_toggle_test_mode"
+        android:title="Toggle Test Mode"/>
+    <item
+        android:id="@+id/action_view_log"
+        android:title="View Activity Log"/>
+    <item
+        android:id="@+id/action_panic_wipe"
+        android:title="Panic Wipe (Erase All)"/>
 </menu>

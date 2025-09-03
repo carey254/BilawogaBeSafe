@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "93435969555",
+    "project_id": "bila-uoga",
+    "storage_bucket": "bila-uoga.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93435969555:android:5cfd549c2f83b126a4ffe6",
+        "android_client_info": {
+          "package_name": "com.example.bilawoga"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACU_olUYGmRzPIpQ1_nZTAUJZ2tPXL1Ts"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

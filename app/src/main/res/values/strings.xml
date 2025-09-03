@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bila woga</string>
+    <string name="app_name">BilaWoga</string>
     <string name="enter_number_to_nsend_sms_nin_nemergency">Enter Number To\nSend SMS\nin\nEMERGENCY!</string>
     <string name="stop">Stop</string>
     <string name="start">Start</string>
@@ -10,4 +10,198 @@
     <string name="Stop">Stop</string>
     <string name="send_emergencyalert">Send Emergency Alert</string>
     <string name="Send_Emergency_Alert">Send Emergency Alert</string>
+    <string name="appbar_scrolling_view_behavior">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
+    <string name="select_emergency_type">Select Emergency Type</string>
+    
+    <!-- Policy Content -->
+    <string name="privacy_policy_html">
+        <![CDATA[
+        <h1>BilaWoga Safety App - Privacy Policy</h1>
+        <p><strong>Last Updated:</strong> May 2025</p>
+
+        <div class="important">
+            <strong>IMPORTANT:</strong> This app is designed for emergency situations. Your safety is our priority.
+        </div>
+
+        <div class="section">
+            <h2>1. Information We Collect</h2>
+            <h3>1.1 Personal Information</h3>
+            <ul>
+                <li><strong>Name:</strong> Your name for emergency identification</li>
+                <li><strong>Emergency Contacts:</strong> Phone numbers of trusted contacts for emergency situations</li>
+                <li><strong>Location Data:</strong> GPS coordinates when SOS is activated</li>
+            </ul>
+
+            <h3>1.2 Technical Information</h3>
+            <ul>
+                <li><strong>Device Information:</strong> Basic device details for app functionality</li>
+                <li><strong>App Usage:</strong> SOS activation times and frequency (for abuse prevention)</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>2. How We Use Your Information</h2>
+            <ul>
+                <li><strong>Emergency Response:</strong> Send your location and emergency message to your contacts</li>
+                <li><strong>App Functionality:</strong> Enable shake detection and SOS features</li>
+                <li><strong>Security:</strong> Prevent app misuse and ensure legitimate emergency use</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>3. Data Security</h2>
+            <div class="important">
+                <strong>Security Measures:</strong>
+                <ul>
+                    <li>All data is stored locally on your device</li>
+                    <li>Location data is only shared when you activate the SOS feature</li>
+                    <li>Optional encrypted cloud backup is available to restore your data if you reinstall or log back in</li>
+                </ul>
+            </div>
+        </div>
+        ]]>
+    </string>
+
+    <string name="terms_of_use_html">
+        <![CDATA[
+        <h1>BilaWoga Safety App - Terms of Use</h1>
+        <p><strong>Last Updated:</strong> May 2025</p>
+
+        <div class="important">
+            <strong>IMPORTANT:</strong> This app is intended for emergency use only. Misuse may result in legal consequences.
+        </div>
+
+        <div class="section">
+            <h2>1. Acceptance of Terms</h2>
+            <p>By using the BilaWoga Safety App, you agree to these Terms of Use. If you do not agree, do not use this app.</p>
+        </div>
+
+        <div class="section">
+            <h2>2. Emergency Use Only</h2>
+            <p>This app is designed for emergency situations. False alerts waste emergency resources and may be illegal.</p>
+        </div>
+
+        <div class="section">
+            <h2>3. User Responsibilities</h2>
+            <ul>
+                <li>Keep your emergency contacts updated</li>
+                <li>Use the app responsibly and only in genuine emergency situations</li>
+                <li>Do not use the app for any illegal purposes</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>4. Our Commitment to Your Safety</h2>
+            <p>We are committed to providing you with a reliable safety tool. However, like all technology, there may be rare occasions when the app is temporarily unavailable due to technical issues or network connectivity. We continuously work to ensure the highest level of reliability for your safety.</p>
+            <p><strong>Your Safety Matters:</strong> We recommend having multiple ways to contact emergency services, such as calling emergency numbers directly. This app is designed to complement, not replace, traditional emergency services.</p>
+        </div>
+        ]]>
+    </string>
+    
+    <!-- Onboarding Alert Content -->
+    <string name="privacy_policy_content">
+        <![CDATA[
+        <h2>Privacy Policy Summary</h2>
+        <p>Your privacy is important to us. Here are the key points of our privacy policy:</p>
+        <ul>
+            <li>Your data is stored securely on your device</li>
+            <li>We don&apos;t collect or store your personal information on our servers</li>
+            <li>Location data is only used when you activate the SOS feature</li>
+            <li>We don&apos;t share your information with third parties</li>
+        </ul>
+        <p>For the full privacy policy, please visit our website.</p>
+        ]]>
+    </string>
+    
+    <string name="terms_of_service_content">
+        <![CDATA[
+        <h2>Terms of Service Summary</h2>
+        <p>By using BilaWoga, you agree to:</p>
+        <ul>
+            <li>Use the app only for genuine emergencies</li>
+            <li>Keep your emergency contacts updated</li>
+            <li>Not misuse the app or send false alerts</li>
+            <li>Be responsible for any misuse of the app</li>
+        </ul>
+        <p>For the full terms of service, please visit our website.</p>
+        ]]>
+    </string>
+
+    <!-- Enhanced Onboarding Policy Summaries -->
+    <string name="privacy_policy_summary">
+        <![CDATA[
+        <h2>Privacy Policy Summary</h2>
+        <p><strong>Your privacy and security are our top priorities.</strong></p>
+        
+        <h3>What We Collect:</h3>
+        <ul>
+            <li><strong>Personal Information:</strong> Your name and emergency contact numbers</li>
+            <li><strong>Location Data:</strong> Only when you activate SOS (for emergency response)</li>
+            <li><strong>Device Information:</strong> Basic device details for app functionality</li>
+        </ul>
+        
+        <h3>How We Protect You:</h3>
+        <ul>
+            <li><strong>Local Storage:</strong> All data is stored securely on your device</li>
+            <li><strong>Encrypted Cloud Backup:</strong> Optional end-to-end encrypted backup enables auto-restore on this device only</li>
+            <li><strong>Encrypted Data:</strong> All sensitive information is encrypted at rest and in backup</li>
+            <li><strong>Emergency Only:</strong> Location data is only shared when you activate SOS</li>
+        </ul>
+        
+        <h3>Your Rights:</h3>
+        <ul>
+            <li>Access and update your information anytime</li>
+            <li>Delete your data completely from the app</li>
+            <li>Control when location data is shared</li>
+            <li>No third-party data sharing</li>
+        </ul>
+        
+        <p><strong>Important:</strong> This app is designed for emergency situations. Your safety comes first, and we ensure your privacy is protected while providing life-saving features.</p>
+        ]]>
+    </string>
+
+    <string name="terms_of_use_summary">
+        <![CDATA[
+        <h2>Terms of Use Summary</h2>
+        <p><strong>BilaWoga is designed for emergency protection only.</strong></p>
+        
+        <h3>Acceptance of Terms:</h3>
+        <p>By using BilaWoga, you agree to these terms and acknowledge that this app is for emergency situations only.</p>
+        
+        <h3>Emergency Use Only:</h3>
+        <ul>
+            <li>Use only for genuine emergency situations</li>
+            <li>False alerts waste emergency resources and may be illegal</li>
+            <li>This app complements, not replaces, traditional emergency services</li>
+        </ul>
+        
+        <h3>Your Responsibilities:</h3>
+        <ul>
+            <li>Keep emergency contacts updated and accurate</li>
+            <li>Use the app responsibly and legally</li>
+            <li>Test features safely (use test mode when available)</li>
+            <li>Report any technical issues promptly</li>
+        </ul>
+        
+        <h3>Important Limitations:</h3>
+        <ul>
+            <li>App availability depends on device and network connectivity</li>
+            <li>Always have alternative emergency contact methods</li>
+            <li>We&apos;re not liable for app unavailability during emergencies</li>
+            <li>Follow local emergency protocols and laws</li>
+        </ul>
+        
+        <h3>Prohibited Uses:</h3>
+        <ul>
+            <li>False emergency alerts</li>
+            <li>Harassment or abuse of emergency contacts</li>
+            <li>Any illegal activities</li>
+            <li>Commercial or non-emergency use</li>
+        </ul>
+        
+        <p><strong>By accepting these terms, you acknowledge that you understand the app&apos;s purpose and will use it responsibly for genuine emergency situations only.</strong></p>
+        ]]>
+    </string>
+
+
 </resources>

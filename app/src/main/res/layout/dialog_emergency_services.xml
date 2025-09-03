@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Emergency Services"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"
+        android:textColor="#D32F2F"/>
+
+    <!-- Uganda Police -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Uganda Police"
+            android:textSize="16sp"
+            android:textColor="#212121"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="999 / 112"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#D32F2F"
+            android:onClick="onEmergencyCall"
+            android:tag="tel:999"/>
+    </LinearLayout>
+
+    <!-- Ambulance Services -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12px">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Ambulance &amp; Fire"
+            android:textSize="16sp"
+            android:textColor="#212121"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0800121222"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#D32F2F"
+            android:onClick="onEmergencyCall"
+            android:tag="tel:0800121222"/>
+    </LinearLayout>
+
+    <!-- Kidnapping Emergency -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12px">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Kidnapping Emergency"
+            android:textSize="16sp"
+            android:textColor="#212121"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0800199990"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#D32F2F"
+            android:onClick="onEmergencyCall"
+            android:tag="tel:0800199990"/>
+    </LinearLayout>
+
+    <!-- Women & Child Protection -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12px">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Women &amp; Child Protection"
+            android:textSize="16sp"
+            android:textColor="#212121"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0800199195"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#D32F2F"
+            android:onClick="onEmergencyCall"
+            android:tag="tel:0800199195"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0"
+        android:layout_marginVertical="8dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="In case of emergency, please use these official numbers to get immediate assistance."
+        android:textSize="12sp"
+        android:textColor="#757575"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp"/>
+
+</LinearLayout>

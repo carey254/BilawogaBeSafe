@@ -1,75 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
-    tools:context=".ServiceMine">
+    android:background="@drawable/logo"
+    tools:context=".MainActivity">
 
-    <View
-        android:id="@+id/moreOptionsView"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_alignParentEnd="true"
-        android:onClick="showChangeNumberMenu"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_margin="20dp"
-        android:background="@drawable/ic_baseline_more_vert_24" />
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
+    <!-- App Bar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        tools:ignore="ExtraText">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="#1976D2">
 
-        <TextView
-            android:id="@+id/textNum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="18sp"
-            android:text="@string/sos_will_be_sent_to_n"
-            android:layout_centerHorizontal="true" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#1976D2"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="BilaWoga Safety"
+            app:titleTextColor="@android:color/white"
+            app:menu="@menu/popup" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/start"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
-            android:layout_below="@id/textNum"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:text="@string/start"
-            android:textColor="@color/white"
-            android:backgroundTint="#261313"
-            app:cornerRadius="10dp"
-            android:onClick="startServiceV" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/stop"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
-            android:layout_below="@id/start"
-            android:text="@string/stop"
-            android:textColor="@color/black"
-            android:backgroundTint="#ffffff"
-            app:cornerRadius="10dp"
-            android:onClick="stopService" />
+    <!-- Main Content -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Button is hidden at first -->
-        <Button
-            android:id="@+id/btn_send_sos"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/Send_Emergency_Alert"
-            android:backgroundTint="@android:color/holo_red_light"
-            android:textColor="@android:color/white"
-            android:visibility="gone"
-            android:onClick="sendSOS"
-            tools:ignore="OnClick" />
+            android:orientation="vertical"
+            android:padding="24dp">
+
+<!-- Emergency Contacts Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Emergency Contacts"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:textColor="#212121"
+                        android:layout_marginBottom="12dp" />
+
+                    <TextView
+                        android:id="@+id/textNum"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="center"
+                        android:text="@string/sos_will_be_sent_to_n"
+                        android:textColor="#757575"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_toggle_numbers"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Show/Hide"
+                            android:textAllCaps="false"
+                            android:textSize="16sp"
+                            android:onClick="toggleEmergencyNumbers"
+                            app:cornerRadius="8dp"
+                            app:strokeColor="#1976D2"
+                            android:textColor="#1976D2" />
+
+                        <TextView
+                            android:id="@+id/emergencyNumbersText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Control Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+
+                <!-- Start Service Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/start"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="center"
+                    android:text="Hotlines &amp; Options"
+                    android:contentDescription="Open emergency hotlines and options"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:backgroundTint="#4CAF50"
+                    app:cornerRadius="8dp"
+                    app:elevation="4dp" />
+
+                <!-- Send SOS Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/send"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginBottom="12dp"
+                    android:text="Send Alert"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:backgroundTint="#F44336"
+                    app:cornerRadius="8dp"
+                    app:elevation="4dp"
+                    android:onClick="sendMessage" />
+
+            </LinearLayout>
+
+            <!-- Setup Mode Status Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/setupModeCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="#E8F5E8"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🛡️ Setup Mode Active"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#2E7D32"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/setupModeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="BilaWoga is ready for future emergencies. All features are active and ready to use when needed."
+                        android:textColor="#2E7D32"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="2dp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- AI Status Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AI Protection"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#212121"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/aiStatusText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AI monitoring active for emergency detection"
+                        android:textColor="#4CAF50"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
 
 
-    </RelativeLayout>
-</RelativeLayout>
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Floating Action Button for Quick SOS -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/quickSOSFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="24dp"
+        android:backgroundTint="#F44336"
+        android:src="@android:drawable/ic_dialog_alert"
+        app:fabSize="normal"
+        app:tint="@android:color/white"
+        android:onClick="sendMessage"
+        android:contentDescription="Send Quick Emergency Alert" />
+
+    <!-- Accessibility FAB -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/accessibilityFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="24dp"
+        android:backgroundTint="#1976D2"
+        android:src="@drawable/ic_accessibility"
+        app:fabSize="normal"
+        app:tint="@android:color/white"
+        android:contentDescription="Open Accessibility Options" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

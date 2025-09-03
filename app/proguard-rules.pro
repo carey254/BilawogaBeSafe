@@ -1,21 +1,39 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Release hardening for BilaWoga
+-optimizations !code/simplification/arithmetic
+-dontnote javax.annotation.**
+-dontwarn javax.annotation.**
+-dontwarn org.checkerframework.**
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Keep Firebase and GMS models
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.firebase.**
+-dontwarn com.google.android.gms.**
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Keep AndroidX Security crypto
+-keep class androidx.security.crypto.** { *; }
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Keep EncryptedSharedPreferences and MasterKey via reflection
+-keepclassmembers class androidx.security.crypto.* {
+    *;
+}
+
+# Keep your utils used by reflection (if any)
+-keep class com.example.bilawoga.utils.** { *; }
+
+# Keep Activities/Services/BroadcastReceivers
+-keep class com.example.bilawoga.** extends android.app.Activity { *; }
+-keep class com.example.bilawoga.** extends android.app.Service { *; }
+-keep class com.example.bilawoga.** extends android.content.BroadcastReceiver { *; }
+
+# Keep parcelables
+-keep class * implements android.os.Parcelable { *; }
+
+# Strip logs in release for privacy
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+    public static *** i(...);
+    public static *** w(...);
+    public static *** e(...);
+}

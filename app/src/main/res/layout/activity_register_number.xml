@@ -1,110 +1,327 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
-    tools:context=".RegisterNumberActivity">
+    android:background="#FAFAFA">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:paddingTop="80dp"
-        android:paddingBottom="80dp"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp">
+        android:background="#1976D2">
 
-        <!-- Text View Header -->
-        <TextView
-            android:id="@+id/text1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/enter_number_to_nsend_sms_nin_nemergency"
-            android:textSize="19sp"
-            android:fontFamily="@font/varela_round"
-            android:textColor="@color/black"
-            android:textAlignment="center"
-            android:gravity="center"/>
-
-        <!-- Name Input Field -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/nameLayout"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/nameEdit"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#1976D2"
+                app:title="Emergency Contact Setup"
+                app:titleTextColor="@android:color/white"
+                app:navigationIcon="@drawable/arrow_back"
+                app:navigationIconTint="@android:color/white">
+
+                <TextView
+                    android:id="@+id/privacyPolicyHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:text="Review Privacy Policy"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:paddingEnd="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    style="?android:attr/borderlessButtonStyle"/>
+
+            </androidx.appcompat.widget.Toolbar>
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Your Name"
-                android:inputType="textPersonName"
-                android:fontFamily="@font/varela_round"
-                android:textAlignment="center"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:background="#1565C0"
+                android:padding="8dp"
+                android:text="Please review our Privacy Policy in the menu (⋮)"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:id="@+id/privacyPolicyBanner"/>
 
-        <!-- Emergency Number Input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/number"
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            android:orientation="vertical"
+            android:padding="24dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/numberEdit"
+            <!-- Header -->
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Emergency Number"
-                android:inputType="phone"
-                android:maxLength="12"
-                android:fontFamily="@font/varela_round"
-                android:textAlignment="center"
-                tools:ignore="HardcodedText"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="Emergency Contact Setup"
+                android:textColor="#212121"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="8dp"/>
 
-        <!-- Incident Type Spinner -->
-        <Spinner
-            android:id="@+id/incidentSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:minHeight="48dp" />
-
-        <!-- Manual Incident Input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/manualIncidentLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/manualIncidentEditText"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Or type your emergency"
-                android:inputType="text"
-                android:fontFamily="@font/varela_round"
-                android:textAlignment="center"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="Configure your emergency contacts for immediate assistance"
+                android:textColor="#757575"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:layout_marginBottom="32dp"/>
 
-        <!-- Save Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/saveButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:backgroundTint="#ffffff"
-            android:fontFamily="@font/varela_round"
-            android:onClick="saveNumber"
-            android:text="Finish"
-            android:textColor="@color/black"
-            app:cornerRadius="10dp"/>
+            <!-- Security Notice -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="#E3F2FD"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:strokeColor="#1976D2"
+                app:strokeWidth="1dp">
 
-    </LinearLayout>
-</ScrollView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Security Information"
+                        android:textColor="#1976D2"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="12dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="All emergency contact information is encrypted and stored securely on your device. This data is accessible only to you and is protected with AES-256 encryption."
+                        android:textColor="#424242"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Name Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nameInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeColor="#1976D2"
+                app:boxStrokeWidth="2dp"
+                app:hintTextColor="#1976D2"
+                app:endIconTint="#1976D2"
+                app:startIconDrawable="@android:drawable/ic_menu_myplaces"
+                app:startIconTint="#1976D2"
+                app:cornerRadius="8dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nameEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter your full name"
+                    android:textColor="#212121"
+                    android:textColorHint="#9E9E9E"
+                    android:textSize="16sp"
+                    android:padding="16dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Emergency Number 1 -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/numberInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeColor="#1976D2"
+                app:boxStrokeWidth="2dp"
+                app:hintTextColor="#1976D2"
+                app:endIconMode="password_toggle"
+                app:endIconTint="#1976D2"
+                app:startIconDrawable="@android:drawable/ic_menu_call"
+                app:startIconTint="#1976D2"
+                app:cornerRadius="8dp"
+                app:endIconContentDescription="Show/Hide emergency number">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/numberEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Primary emergency contact number"
+                    android:inputType="phone"
+                    android:textColor="#212121"
+                    android:textColorHint="#9E9E9E"
+                    android:textSize="16sp"
+                    android:padding="16dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Emergency Number 2 -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/number2InputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeColor="#1976D2"
+                app:boxStrokeWidth="2dp"
+                app:hintTextColor="#1976D2"
+                app:endIconMode="password_toggle"
+                app:endIconTint="#1976D2"
+                app:startIconDrawable="@android:drawable/ic_menu_call"
+                app:startIconTint="#1976D2"
+                app:cornerRadius="8dp"
+                app:endIconContentDescription="Show/Hide emergency number">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/number2Edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Secondary emergency contact number (optional)"
+                    android:inputType="phone"
+                    android:textColor="#212121"
+                    android:textColorHint="#9E9E9E"
+                    android:textSize="16sp"
+                    android:padding="16dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Emergency Type Selection -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Type of Emergency"
+                android:textColor="#212121"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:strokeColor="#000000"
+                app:strokeWidth="2dp">
+
+                <Spinner
+                    android:id="@+id/incidentSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="56dp"
+                    android:padding="16dp"
+                    android:background="@android:color/transparent"
+                    android:spinnerMode="dropdown"
+                    android:popupBackground="#424242"
+                    android:prompt="@string/select_emergency_type"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:dropDownVerticalOffset="8dp"
+                    android:dropDownHorizontalOffset="0dp"
+                    android:dropDownWidth="match_parent"
+                />
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Custom Emergency Type -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/manualIncidentInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeColor="#1976D2"
+                app:boxStrokeWidth="2dp"
+                app:hintTextColor="#1976D2"
+                app:startIconDrawable="@android:drawable/ic_menu_edit"
+                app:startIconTint="#1976D2"
+                app:cornerRadius="8dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/manualIncidentEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Describe the type of emergency (if not listed above)"
+                    android:minLines="3"
+                    android:gravity="top"
+                    android:textColor="#212121"
+                    android:textColorHint="#9E9E9E"
+                    android:textSize="16sp"
+                    android:padding="16dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Submit Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/submitButton"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:text="Save Emergency Contacts"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="20dp"
+                android:backgroundTint="#4CAF50"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                app:cornerRadius="8dp"
+                app:elevation="4dp"
+                android:contentDescription="Save Emergency Contacts"
+                android:onClick="saveNumber"/>
+
+            <!-- Help Text -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="You can update these contacts at any time from the main screen"
+                android:textColor="#757575"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:layout_marginTop="16dp"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Accessibility Floating Action Button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/accessibilityFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="24dp"
+        android:backgroundTint="#1976D2"
+        android:contentDescription="Accessibility Options"
+        android:src="@drawable/ic_accessibility"
+        app:tint="@android:color/white" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

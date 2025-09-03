@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/background"
+    android:padding="16dp"
+    android:maxHeight="400dp">
+
+    <!-- Header Section with Cancel Button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp"
+        android:padding="12dp"
+        android:background="@drawable/background"
+        android:elevation="4dp">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_accessibility"
+            android:tint="#1976D2"
+            android:layout_marginEnd="12dp"
+            android:contentDescription="Accessibility Icon" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Accessibility Options"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#1976D2" />
+
+        <Button
+            android:id="@+id/btnCancelAccessibility"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✕"
+            android:textSize="18sp"
+            android:textColor="#D32F2F"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="8dp"
+            android:contentDescription="Close Accessibility Options" />
+
+    </LinearLayout>
+
+        <!-- Audio Settings Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:strokeColor="#E0E0E0"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_lock_silent_mode_off"
+                        android:tint="#1976D2"
+                        android:layout_marginEnd="8dp"
+                        android:contentDescription="Audio and Speech Icon" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Audio and Speech"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#1976D2" />
+
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnStartTTS"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Start Text-to-Speech"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="#1976D2"
+                    app:cornerRadius="6dp"
+                    app:icon="@android:drawable/ic_media_play"
+                    app:iconGravity="textStart"
+                    app:iconTint="@android:color/white"
+                    android:contentDescription="Start Text-to-Speech Reading" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnStopAudio"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Stop Audio"
+                    android:textSize="14sp"
+                    android:backgroundTint="#D32F2F"
+                    app:cornerRadius="6dp"
+                    app:icon="@android:drawable/ic_media_pause"
+                    app:iconGravity="textStart"
+                    app:iconTint="@android:color/white"
+                    android:contentDescription="Stop Audio" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Visual Accessibility Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:strokeColor="#E0E0E0"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_menu_view"
+                        android:tint="#1976D2"
+                        android:layout_marginEnd="8dp"
+                        android:contentDescription="Visual Accessibility Icon" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Visual Accessibility"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#1976D2" />
+
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnHighContrast"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="High Contrast Mode"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="#1976D2"
+                    app:cornerRadius="6dp"
+                    app:icon="@android:drawable/ic_menu_view"
+                    app:iconGravity="textStart"
+                    app:iconTint="@android:color/white"
+                    android:contentDescription="Toggle High Contrast Mode" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnIncreaseTextSize"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="Increase Text Size"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="#1976D2"
+                    app:cornerRadius="6dp"
+                    app:icon="@android:drawable/ic_menu_edit"
+                    app:iconGravity="textStart"
+                    app:iconTint="@android:color/white"
+                    android:contentDescription="Increase Text Size" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnReadingGuide"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="Reading Guide"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="#1976D2"
+                    app:cornerRadius="6dp"
+                    app:icon="@android:drawable/ic_menu_help"
+                    app:iconGravity="textStart"
+                    app:iconTint="@android:color/white"
+                    android:contentDescription="Toggle Reading Guide" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnReadPage"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="Read Page Content"
+                    android:textSize="14sp"
+                    android:backgroundTint="#1976D2"
+                    app:cornerRadius="6dp"
+                    app:icon="@android:drawable/ic_menu_info_details"
+                    app:iconGravity="textStart"
+                    app:iconTint="@android:color/white"
+                    android:contentDescription="Read Page Content Aloud" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Reset Settings Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:strokeColor="#E0E0E0"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnResetAccessibility"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="Reset All Settings"
+                    android:textSize="14sp"
+                    android:backgroundTint="#FF6F00"
+                    app:cornerRadius="6dp"
+                    app:icon="@android:drawable/ic_menu_revert"
+                    app:iconGravity="textStart"
+                    app:iconTint="@android:color/white"
+                    android:contentDescription="Reset All Accessibility Settings" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
