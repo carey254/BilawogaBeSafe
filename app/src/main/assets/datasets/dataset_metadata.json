@@ -1,33 +1,73 @@
 {
   "dataset_info": {
     "name": "GBV Detection Training Dataset",
-    "version": "1.0",
+    "version": "2.0",
     "created_date": "2024-01-01",
-    "last_updated": "2024-01-01",
-    "description": "Training dataset for gender-based violence detection using audio analysis",
-    "total_samples": 6,
-    "audio_format": "WAV",
+    "last_updated": "2025-05-15",
+    "description": "Training dataset for gender-based violence detection using text conversation analysis and audio analysis",
+    "total_text_samples": 5000,
+    "total_audio_training_samples": 3000,
+    "text_format": "CSV",
+    "audio_model_format": "TFLite",
     "sample_rate": "16000 Hz",
     "channels": "mono",
     "language": "multilingual"
   },
-  "label_distribution": {
-    "emergency": 3,
-    "normal": 2,
-    "uncertain": 1
+  "text_dataset": {
+    "file": "gbv_dataset.csv",
+    "total_samples": 5000,
+    "label_distribution": {
+      "abuse": 1217,
+      "distress": 1274,
+      "emergency": 1235,
+      "normal": 1274
+    },
+    "urgency_distribution": {
+      "high": 1235,
+      "medium": 2491,
+      "low": 1274
+    },
+    "context_distribution": {
+      "relationship": 1023,
+      "family": 1013,
+      "public": 994,
+      "unknown": 991,
+      "domestic": 979
+    },
+    "fields": ["id", "conversation", "label", "urgency_level", "risk_score",
+               "context_type", "escalation_level", "intervention_required", "confidence_score"]
   },
-  "severity_distribution": {
-    "high": 3,
-    "medium": 1,
-    "low": 2
+  "supplementary_datasets": {
+    "emergency_samples": {
+      "file": "emergency_samples.csv",
+      "total_samples": 1235,
+      "description": "Emergency-labeled subset from main dataset"
+    },
+    "non_emergency_samples": {
+      "file": "non_emergency_samples.csv",
+      "total_samples": 1274,
+      "description": "Normal-labeled subset from main dataset"
+    }
   },
-  "context_distribution": {
-    "domestic_violence": 1,
-    "assault": 1,
-    "harassment": 1,
-    "family_discussion": 1,
-    "casual_conversation": 1,
-    "family_disagreement": 1
+  "models": {
+    "audio_model": {
+      "file": "sos_audio_model.tflite",
+      "input_shape": [1, 40, 431, 1],
+      "output_shape": [1, 1],
+      "description": "CNN-based audio emergency detection using MFCC features",
+      "training_accuracy": 0.9967,
+      "training_samples": 3000,
+      "classes": ["normal", "emergency"]
+    },
+    "text_model": {
+      "file": "gbv_text_model.tflite",
+      "input_shape": [1, 100],
+      "output_shape": [1, 4],
+      "description": "Neural network for text-based GBV classification",
+      "training_accuracy": 0.98,
+      "training_samples": 5000,
+      "classes": ["abuse", "distress", "emergency", "normal"]
+    }
   },
   "quality_metrics": {
     "signal_to_noise_ratio": "good",
@@ -37,9 +77,8 @@
   },
   "usage_guidelines": {
     "training_split": {
-      "train": 0.7,
-      "validation": 0.2,
-      "test": 0.1
+      "train": 0.8,
+      "validation": 0.2
     },
     "augmentation": [
       "noise_addition",

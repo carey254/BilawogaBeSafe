@@ -18,6 +18,7 @@ public class TextGBVDetector {
     
     private final Context context;
     private final CSVTrainingDataManager csvDataManager;
+    private TextGBVModelInference mlModel;
     private boolean isActive = false;
     
     // GBV indicator patterns
@@ -65,6 +66,18 @@ public class TextGBVDetector {
     public TextGBVDetector(Context context, CSVTrainingDataManager csvDataManager) {
         this.context = context;
         this.csvDataManager = csvDataManager;
+        try {
+            this.mlModel = new TextGBVModelInference(context);
+            if (mlModel.isReady()) {
+                Log.i(TAG, "ML text model loaded - using hybrid rule+ML detection");
+            } else {
+                Log.w(TAG, "ML text model not available - using rule-based detection only");
+                mlModel = null;
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "Failed to load ML text model: " + e.getMessage());
+            mlModel = null;
+        }
     }
     
     /**
@@ -118,8 +131,29 @@ public class TextGBVDetector {
         result.riskScore = controlScore + abuseScore + isolationScore + manipulationScore;
         result.riskScore = Math.min(1.0f, result.riskScore);
         
-        // Determine if GBV is detected
-        result.isGBVDetected = result.riskScore > 0.3f; // 30% threshold
+        // Enhance with ML model if available
+        float mlConfidence = 0.0f;
+        String mlPrediction = null;
+        if (mlModel != null) {
+            try {
+                TextGBVModelInference.PredictionResult mlResult = mlModel.predict(text);
+                mlConfidence = mlResult.confidence;
+                mlPrediction = mlResult.predictedClass;
+                // Combine rule-based risk score with ML confidence
+                if (mlResult.isGBVDetected) {
+                    result.riskScore = Math.max(result.riskScore, mlConfidence);
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "ML prediction failed, using rule-based only: " + e.getMessage());
+            }
+        }
+        
+        // Determine if GBV is detected (use ML prediction if available)
+        if (mlPrediction != null && mlConfidence > 0.6f) {
+            result.isGBVDetected = !mlPrediction.equals("normal");
+        } else {
+            result.isGBVDetected = result.riskScore > 0.3f;
+        }
         
         // Determine type and confidence
         if (result.isGBVDetected) {
