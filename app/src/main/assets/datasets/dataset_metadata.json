@@ -1,0 +1,51 @@
+{
+  "dataset_info": {
+    "name": "GBV Detection Training Dataset",
+    "version": "1.0",
+    "created_date": "2024-01-01",
+    "last_updated": "2024-01-01",
+    "description": "Training dataset for gender-based violence detection using audio analysis",
+    "total_samples": 6,
+    "audio_format": "WAV",
+    "sample_rate": "16000 Hz",
+    "channels": "mono",
+    "language": "multilingual"
+  },
+  "label_distribution": {
+    "emergency": 3,
+    "normal": 2,
+    "uncertain": 1
+  },
+  "severity_distribution": {
+    "high": 3,
+    "medium": 1,
+    "low": 2
+  },
+  "context_distribution": {
+    "domestic_violence": 1,
+    "assault": 1,
+    "harassment": 1,
+    "family_discussion": 1,
+    "casual_conversation": 1,
+    "family_disagreement": 1
+  },
+  "quality_metrics": {
+    "signal_to_noise_ratio": "good",
+    "audio_clarity": "high",
+    "background_noise": "minimal",
+    "voice_clarity": "clear"
+  },
+  "usage_guidelines": {
+    "training_split": {
+      "train": 0.7,
+      "validation": 0.2,
+      "test": 0.1
+    },
+    "augmentation": [
+      "noise_addition",
+      "time_stretching",
+      "pitch_shifting"
+    ],
+    "cross_validation": "5-fold"
+  }
+}

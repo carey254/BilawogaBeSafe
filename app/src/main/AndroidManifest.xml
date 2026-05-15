@@ -20,10 +20,11 @@
     <!-- Location Permissions - Required for emergency location sharing -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    
-    <!-- SMS Permissions - Only send SMS for emergency alerts -->
+    <!-- SMS permission for direct emergency alert sending -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.SEND_SMS"/>
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    
+    <!-- SMS permissions removed: we hand off to user's SMS app (ACTION_SENDTO) -->
     
     <!-- Service Permissions - Required for background shake detection -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
@@ -34,36 +35,47 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE"/>
     
+    <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" />
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+    
     <!-- Boot permission for auto-start service -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     
     <!-- Vibration permission for SOS feedback -->
     <uses-permission android:name="android.permission.VIBRATE"/>
-    <!-- Internet permission for Firebase backup -->
+    
+    <!-- Internet permission for Firebase backup and email service -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    
+    <!-- System alert window permission for emergency dialogs -->
+    
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
+        android:name="com.example.bilawoga.BilaWogaApp"
         android:allowBackup="false"
         android:fullBackupContent="false"
-        android:icon="@drawable/logo"
+        android:icon="@drawable/logy"
         android:label="Bila Woga"
-        android:roundIcon="@drawable/logo"
+        android:roundIcon="@drawable/logy"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:theme="@style/Theme.BilaWoga">
+        android:theme="@style/Theme.BilaWoga"
+        android:showWhenLocked="true"
+        android:turnScreenOn="true"
+        android:supportsRtl="true">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
         <!-- TODO: Add privacy policy dialog and link in app UI -->
 
-        <!-- Register SMS Receiver -->
-        <receiver
-            android:name=".SMSReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-            </intent-filter>
-        </receiver>
+        <!-- SMS receiver removed: no direct SMS handling in Play build -->
 
         <!-- Boot Receiver for auto-start service -->
         <receiver
-            android:name=".BootReceiver"
+            android:name="com.example.bilawoga.BootReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
@@ -72,67 +84,103 @@
 
         <!-- Splash Screen Activity -->
         <activity
-            android:name=".SplashScreen"
-            android:exported="true">
+            android:name="com.example.bilawoga.SplashScreen"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
+        <!-- Settings Activity -->
+        <activity
+            android:name="com.example.bilawoga.SettingsActivity"
+            android:exported="false"
+            android:label="@string/settings_title"
+            android:parentActivityName="com.example.bilawoga.MainActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.bilawoga.MainActivity" />
+        </activity>
+
         <!-- Main Activity -->
         <activity
-            android:name=".MainActivity"
-            android:exported="false">
+            android:name="com.example.bilawoga.MainActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
             <intent-filter>
-                <action android:name="com.example.bilawoga.SMS_SENT" />
-                <action android:name="com.example.bilawoga.SMS_DELIVERED" />
+                <action android:name="com.bilawoga.safety.SMS_SENT" />
+                <action android:name="com.bilawoga.safety.SMS_DELIVERED" />
             </intent-filter>
         </activity>
 
+        <!-- SMS status receivers -->
+        <receiver
+            android:name="com.example.bilawoga.SmsSentReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.bilawoga.safety.SMS_SENT" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.example.bilawoga.SmsDeliveredReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.bilawoga.safety.SMS_DELIVERED" />
+            </intent-filter>
+        </receiver>
+
         <!-- Countdown Activity -->
         <activity
-            android:name=".CountdownActivity"
-            android:exported="false" />
+            android:name="com.example.bilawoga.CountdownActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" />
 
         <!-- Register Number Activity -->
         <activity
-            android:name=".RegisterNumberActivity"
-            android:exported="false">
+            android:name="com.example.bilawoga.RegisterNumberActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
         </activity>
 
         <!-- Select Incident Activity -->
         <activity
-            android:name=".SelectIncidentActivity"
-            android:exported="false">
+            android:name="com.example.bilawoga.SelectIncidentActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
         </activity>
 
         <!-- Onboarding Activity -->
         <activity
-            android:name=".OnboardingActivity"
-            android:exported="false">
+            android:name="com.example.bilawoga.OnboardingActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
         </activity>
 
         <!-- Background Service -->
         <service
-            android:name=".ServiceMine"
-            android:exported="false">
-        </service>
+            android:name="com.example.bilawoga.ServiceMine"
+            android:exported="false"
+            android:foregroundServiceType="location" />
 
         <!-- Shake Service -->
         <service
-            android:name=".ShakeService"
-            android:exported="false"/>
+            android:name="com.example.bilawoga.ShakeService"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
 
         <!-- Background Audio Monitor Service -->
         <service
-            android:name=".utils.BackgroundAudioMonitor"
+            android:name="com.example.bilawoga.utils.BackgroundAudioMonitor"
             android:exported="false"
             android:foregroundServiceType="microphone"/>
 
         <activity
-            android:name=".utils.PolicyViewerActivity"
+            android:name="com.example.bilawoga.utils.PolicyViewerActivity"
             android:exported="false"
-            android:theme="@style/Theme.BilaWoga" />
+            android:theme="@style/Theme.BilaWoga"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" />
     </application>
 </manifest>

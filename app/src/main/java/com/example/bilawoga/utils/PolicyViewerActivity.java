@@ -15,12 +15,14 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.bilawoga.R;
+import com.bilawoga.safety.R;
+import com.example.bilawoga.AnalyticsConsentManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Locale;
@@ -41,6 +43,8 @@ public class PolicyViewerActivity extends AppCompatActivity {
     private boolean isAudioActive = false;
     private Handler audioHandler = new Handler(Looper.getMainLooper());
     private Runnable audioRunnable;
+    private boolean ttsReady = false;
+    private boolean pendingAutoRead = false;
 
     public static final String EXTRA_POLICY_TYPE = "policy_type";
     public static final String POLICY_TYPE_PRIVACY = "privacy";
@@ -49,7 +53,12 @@ public class PolicyViewerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // SECURITY: Prevent screenshots and screen recording
+        com.example.bilawoga.utils.ScreenSecurityManager.preventScreenshots(this);
+        
         setContentView(R.layout.activity_policy_viewer);
+        TTSLanguageManager.initDefaultOnFirstLaunch(this);
 
         Log.d("PolicyViewerActivity", "onCreate called");
         Toast.makeText(this, "PolicyViewerActivity launched", Toast.LENGTH_SHORT).show();
@@ -77,6 +86,10 @@ public class PolicyViewerActivity extends AppCompatActivity {
         setupWebView();
         setupButtons();
         setupAccessibilityFeatures();
+        if (TTSLanguageManager.isAutoReadEnabled(this)) {
+            // Start auto reading the policy content on first launch if enabled
+            startTextToSpeech();
+        }
     }
 
     private void setupAccessibilityFeatures() {
@@ -96,13 +109,21 @@ public class PolicyViewerActivity extends AppCompatActivity {
     private void setupTextToSpeech() {
         tts = new TextToSpeech(this, status -> {
             if (status == TextToSpeech.SUCCESS) {
-                Locale ukLocale = Locale.UK;
-                int result = tts.setLanguage(ukLocale);
+                ttsReady = true;
+                java.util.Locale selected = TTSLanguageManager.getSelectedLocale(this);
+                int result = TTSLanguageManager.setTtsLanguage(tts, selected);
                 if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    Toast.makeText(this, "UK English voice not available. Please install UK English TTS in your device settings.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.selected_tts_voice_missing), Toast.LENGTH_LONG).show();
+                    try { startActivity(new android.content.Intent(android.speech.tts.TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA)); } catch (Exception ignored) {}
                 }
                 tts.setSpeechRate(1.0f);
                 tts.setPitch(1.0f);
+                setBestVoiceForLocale(selected);
+                // Start if preference is enabled or a start was requested earlier
+                if (TTSLanguageManager.isAutoReadEnabled(this) || pendingAutoRead) {
+                    pendingAutoRead = false;
+                    startTextToSpeech();
+                }
             }
         });
     }
@@ -128,53 +149,118 @@ public class PolicyViewerActivity extends AppCompatActivity {
     }
 
     private void setupAccessibilityDialogButtons(android.app.Dialog dialog, View dialogView) {
-        // Cancel button
-        dialogView.findViewById(R.id.btnCancelAccessibility).setOnClickListener(v -> {
-            dialog.dismiss();
-            if (tts != null) {
-                tts.speak("Accessibility options closed", TextToSpeech.QUEUE_FLUSH, null, null);
-            }
-        });
+        View rowReadPage = dialogView.findViewById(R.id.rowReadPage);
+        Switch switchAutoRead = dialogView.findViewById(R.id.switchAutoRead);
+        Switch switchCursorReading = dialogView.findViewById(R.id.switchCursorReading);
+        View btnTextLarger = dialogView.findViewById(R.id.btnTextLarger);
+        View btnTextSmaller = dialogView.findViewById(R.id.btnTextSmaller);
+        Button btnReset = dialogView.findViewById(R.id.btnResetAccessibility);
+        Button btnCancel = dialogView.findViewById(R.id.btnCancelAccessibility);
+        TextView textFooterStatus = dialogView.findViewById(R.id.textFooterStatus);
+        TextView textContrastValue = dialogView.findViewById(R.id.textContrastValue);
+        TextView textColorsValue = dialogView.findViewById(R.id.textColorsValue);
+        View rowLanguage = dialogView.findViewById(R.id.rowLanguage);
+        TextView textLanguageValue = dialogView.findViewById(R.id.textLanguageValue);
 
-        // Text-to-Speech buttons
-        dialogView.findViewById(R.id.btnStartTTS).setOnClickListener(v -> {
-            startTextToSpeech();
-            Toast.makeText(this, "Text-to-Speech started", Toast.LENGTH_SHORT).show();
-        });
+        if (rowReadPage != null) {
+            rowReadPage.setOnClickListener(v -> {
+                speakPolicyContent();
+                Toast.makeText(this, getString(R.string.reading_policy_content), Toast.LENGTH_SHORT).show();
+            });
+        }
 
-        dialogView.findViewById(R.id.btnStopAudio).setOnClickListener(v -> {
-            stopAudio();
-            Toast.makeText(this, "Audio stopped", Toast.LENGTH_SHORT).show();
-        });
+        if (switchAutoRead != null) {
+            switchAutoRead.setOnCheckedChangeListener((button, isChecked) -> {
+                if (isChecked) {
+                    startTextToSpeech();
+                    Toast.makeText(this, getString(R.string.auto_read_on), Toast.LENGTH_SHORT).show();
+                } else {
+                    stopAudio();
+                    Toast.makeText(this, getString(R.string.auto_read_off), Toast.LENGTH_SHORT).show();
+                }
+                TTSLanguageManager.setAutoReadEnabled(this, isChecked);
+                updateFooter(textFooterStatus, isChecked);
+            });
+        }
 
-        // Visual accessibility buttons
-        dialogView.findViewById(R.id.btnHighContrast).setOnClickListener(v -> {
-            toggleHighContrast();
-            Toast.makeText(this, "High Contrast Toggled", Toast.LENGTH_SHORT).show();
-        });
+        if (switchCursorReading != null) {
+            switchCursorReading.setOnCheckedChangeListener((button, isChecked) -> {
+                toggleReadingGuide();
+                Toast.makeText(this, (isChecked ? getString(R.string.cursor_reading_on) : getString(R.string.cursor_reading_off)), Toast.LENGTH_SHORT).show();
+            });
+        }
 
-        dialogView.findViewById(R.id.btnIncreaseTextSize).setOnClickListener(v -> {
-            toggleTextSize();
-            Toast.makeText(this, "Text Size Toggled", Toast.LENGTH_SHORT).show();
-        });
+        // No image description switch in layout
 
-        dialogView.findViewById(R.id.btnReadingGuide).setOnClickListener(v -> {
-            toggleReadingGuide();
-            Toast.makeText(this, "Reading Guide Toggled", Toast.LENGTH_SHORT).show();
-        });
+        if (btnTextLarger != null) {
+            btnTextLarger.setOnClickListener(v -> {
+                toggleTextSize();
+                Toast.makeText(this, getString(R.string.text_larger), Toast.LENGTH_SHORT).show();
+            });
+        }
 
-        dialogView.findViewById(R.id.btnReadPage).setOnClickListener(v -> {
-            speakPolicyContent();
-            Toast.makeText(this, "Reading Policy Content", Toast.LENGTH_SHORT).show();
-        });
+        if (btnTextSmaller != null) {
+            btnTextSmaller.setOnClickListener(v -> {
+                toggleTextSize();
+                Toast.makeText(this, getString(R.string.text_smaller), Toast.LENGTH_SHORT).show();
+            });
+        }
 
-        dialogView.findViewById(R.id.btnResetAccessibility).setOnClickListener(v -> {
-            resetAccessibilitySettings();
-            Toast.makeText(this, "All settings reset", Toast.LENGTH_SHORT).show();
-        });
+        if (btnReset != null) {
+            btnReset.setOnClickListener(v -> {
+                resetAccessibilitySettings();
+                if (switchAutoRead != null) switchAutoRead.setChecked(false);
+                if (switchCursorReading != null) switchCursorReading.setChecked(false);
+                if (textContrastValue != null) textContrastValue.setText(getString(R.string.normal));
+                if (textColorsValue != null) textColorsValue.setText(getString(R.string.normal));
+                updateFooter(textFooterStatus, false);
+                Toast.makeText(this, getString(R.string.all_settings_reset), Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        if (btnCancel != null) {
+            btnCancel.setOnClickListener(v -> {
+                dialog.dismiss();
+                if (tts != null) {
+                    tts.speak(getString(R.string.accessibility_options_closed), TextToSpeech.QUEUE_FLUSH, null, null);
+                }
+            });
+        }
+
+        // Initialize switch, footer and language state
+        if (textLanguageValue != null) textLanguageValue.setText(TTSLanguageManager.getSelectedLanguageName(this));
+        if (rowLanguage != null) {
+            rowLanguage.setOnClickListener(v -> {
+                TTSLanguageManager.toggleLanguage(this);
+                if (textLanguageValue != null) textLanguageValue.setText(TTSLanguageManager.getSelectedLanguageName(this));
+                if (tts != null) {
+                    java.util.Locale selected = TTSLanguageManager.getSelectedLocale(this);
+                    int result = TTSLanguageManager.setTtsLanguage(tts, selected);
+                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        try { startActivity(new android.content.Intent(android.speech.tts.TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA)); } catch (Exception ignored) {}
+                    }
+                }
+                if (switchAutoRead != null && switchAutoRead.isChecked()) {
+                    startTextToSpeech();
+                }
+            });
+        }
+        boolean autoPref = TTSLanguageManager.isAutoReadEnabled(this);
+        if (switchAutoRead != null) switchAutoRead.setChecked(autoPref);
+        updateFooter(textFooterStatus, autoPref);
+    }
+
+    private void updateFooter(TextView footer, boolean autoOn) {
+        if (footer != null) {
+            footer.setText(getString(R.string.font_status, (autoOn ? getString(R.string.auto_on) : getString(R.string.auto_off))));
+        }
     }
 
     private void startTextToSpeech() {
+        if (!ttsReady) {
+            pendingAutoRead = true;
+            return;
+        }
         if (isAudioActive) {
             stopAudio();
         }
@@ -187,6 +273,28 @@ public class PolicyViewerActivity extends AppCompatActivity {
             }
         };
         audioHandler.post(audioRunnable);
+    }
+
+    private void setBestVoiceForLocale(java.util.Locale locale) {
+        try {
+            if (tts == null) return;
+            java.util.Set<android.speech.tts.Voice> voices = tts.getVoices();
+            if (voices == null) return;
+            android.speech.tts.Voice best = null;
+            for (android.speech.tts.Voice v : voices) {
+                java.util.Locale vLoc = v.getLocale();
+                if (vLoc != null && vLoc.getLanguage().equalsIgnoreCase(locale.getLanguage())) {
+                    boolean countryMatch = vLoc.getCountry() != null && vLoc.getCountry().equalsIgnoreCase(locale.getCountry());
+                    if (best == null || countryMatch) {
+                        best = v;
+                        if (countryMatch) break;
+                    }
+                }
+            }
+            if (best != null) {
+                tts.setVoice(best);
+            }
+        } catch (Exception ignored) {}
     }
 
     private void stopAudio() {
@@ -338,7 +446,7 @@ public class PolicyViewerActivity extends AppCompatActivity {
     }
 
     private void showPrivacyPolicy() {
-        titleText.setText("Privacy Policy");
+        titleText.setText(getString(R.string.privacy_policy));
         
         // Create WCAG-compliant HTML content with semantic structure
         String htmlContent = "<html><head>" +
@@ -396,7 +504,7 @@ public class PolicyViewerActivity extends AppCompatActivity {
     }
 
     private void showTermsOfUse() {
-        titleText.setText("Terms of Use");
+        titleText.setText(getString(R.string.terms_of_use));
         
         // Create WCAG-compliant HTML content with semantic structure
         String htmlContent = "<html><head>" +
@@ -490,7 +598,7 @@ public class PolicyViewerActivity extends AppCompatActivity {
                 super.onPageFinished(view, url);
                 // Announce page loaded for screen readers
                 if (tts != null) {
-                    tts.speak("Policy content loaded", TextToSpeech.QUEUE_FLUSH, null, null);
+                    tts.speak(getString(R.string.policy_content_loaded), TextToSpeech.QUEUE_FLUSH, null, null);
                 }
             }
             
@@ -505,7 +613,7 @@ public class PolicyViewerActivity extends AppCompatActivity {
                 errorMessage.setText(message);
                 errorMessage.setVisibility(View.VISIBLE);
                 if (tts != null) {
-                    tts.speak("Error loading policy content", TextToSpeech.QUEUE_FLUSH, null, null);
+                    tts.speak(getString(R.string.error_loading_policy_content), TextToSpeech.QUEUE_FLUSH, null, null);
                 }
             }
         });
@@ -568,7 +676,14 @@ public class PolicyViewerActivity extends AppCompatActivity {
             
             // Announce acceptance for screen readers
             if (tts != null) {
-                tts.speak("Policy accepted", TextToSpeech.QUEUE_FLUSH, null, null);
+                tts.speak(getString(R.string.policy_accepted), TextToSpeech.QUEUE_FLUSH, null, null);
+            }
+            // Enable telemetry only after both policies are accepted and explicit toggle stored
+            boolean hasPrivacy = TermsOfUseManager.hasAcceptedPrivacyPolicy(this);
+            boolean hasTerms = TermsOfUseManager.hasAcceptedTermsOfUse(this);
+            if (hasPrivacy && hasTerms) {
+                // Set user telemetry preference to enabled now that consent is complete
+                AnalyticsConsentManager.setConsent(this, true);
             }
             
             finish();

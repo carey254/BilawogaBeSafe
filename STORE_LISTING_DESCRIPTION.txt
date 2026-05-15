@@ -1,0 +1,88 @@
+🚨 BilaWoga - Your Personal Emergency Safety Companion
+
+BilaWoga is a comprehensive emergency safety app designed to protect you when you need help most. With advanced AI-powered detection, stealth mode operation, and automatic emergency response, BilaWoga ensures your safety is never compromised.
+
+✨ KEY FEATURES:
+
+🔒 Stealth Mode Emergency SOS
+Send emergency alerts completely silently - no visible indication appears on your device. Only your trusted contacts receive the alert, ensuring your safety during dangerous situations. Messages are sent directly to the carrier network, bypassing all SMS apps for maximum stealth.
+
+🤖 AI-Powered Emergency Detection
+Advanced artificial intelligence continuously monitors background audio to automatically detect emergency sounds such as screaming, distress calls, and cries for help. When an emergency is detected, SOS is sent automatically with your precise location and audio recording.
+
+📹 Automatic Audio Recording
+Records audio evidence (1 second to 10 minutes) when emergencies are detected or when you manually send an SOS. Audio recordings are automatically transmitted to your trusted contacts along with your location, providing crucial context for emergency responders.
+
+📱 Shake Detection
+Simply shake your device to instantly send an SOS alert with your location. Works even when the app is locked or running in the background. Perfect for situations where you can't access your phone screen.
+
+🔐 Secure Encrypted Storage
+All sensitive data including emergency contacts, personal information, and audio recordings are encrypted using AES-256-GCM encryption and stored securely on your device. Your privacy and security are our top priorities.
+
+🌍 Multi-Language Support
+Available in English and Swahili for wider accessibility. The app automatically adapts to your device language settings.
+
+✅ Trusted Contact Verification
+SOS messages are only sent to verified trusted contacts stored in encrypted storage. You control who receives your emergency alerts, ensuring maximum security and privacy.
+
+📊 Silent Logging System
+All emergency events are logged securely and silently. You can review logs later to verify that your SOS was sent successfully. Logs are encrypted and stored locally on your device.
+
+🔄 Automatic Retry Mechanism
+If sending fails, the app automatically retries up to 5 times with exponential backoff to ensure your emergency message is delivered. The system ensures message delivery even with network issues.
+
+📍 Precise Location Sharing
+When SOS is activated, your precise GPS location is automatically included in the emergency message, along with Google Maps links for easy navigation to your location.
+
+🎯 HOW IT WORKS:
+
+1. Set Up Your Emergency Contacts
+   - Add up to 2 trusted emergency contacts during initial setup
+   - Contacts are verified and stored securely in encrypted storage
+
+2. Enable Background Monitoring (Optional)
+   - AI monitoring works continuously in the background
+   - Detects emergency sounds automatically
+   - No user interaction required
+
+3. Emergency Detection & Response
+   - AI detects emergency sounds → Automatic SOS sent
+   - Manual SOS button → Instant alert sent
+   - Shake device → SOS sent immediately
+   - All methods include location and audio recording
+
+4. Your Contacts Receive
+   - Emergency alert message with your name
+   - Precise GPS location with map links
+   - Audio recording (if available)
+   - Incident type information
+
+🔒 PRIVACY & SECURITY:
+
+• All data stored locally on your device
+• AES-256-GCM encryption for all sensitive information
+• No data shared with third parties
+• Stealth mode ensures no visible indication on your device
+• Encrypted log storage for privacy protection
+• User can delete all data at any time through app settings
+
+⚠️ IMPORTANT DISCLAIMER:
+
+This app is designed for genuine emergency situations only. Please use responsibly and only activate SOS in real emergency situations. False alarms may delay response to actual emergencies.
+
+📞 SUPPORT:
+
+For questions, support, or feedback, please contact us through the app or via email.
+
+Thank you for choosing BilaWoga. Your safety is our priority.
+
+---
+
+BilaWoga - Because your safety matters.
+
+
+
+
+
+
+

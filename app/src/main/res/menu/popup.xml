@@ -19,6 +19,14 @@
         android:id="@+id/action_view_log"
         android:title="View Activity Log"/>
     <item
+        android:id="@+id/action_settings"
+        android:title="Settings"
+        android:icon="@android:drawable/ic_menu_preferences"/>
+    <item
+        android:id="@+id/action_refresh_contacts"
+        android:title="Refresh Emergency Contacts"
+        android:icon="@android:drawable/ic_menu_rotate"/>
+    <item
         android:id="@+id/action_panic_wipe"
         android:title="Panic Wipe (Erase All)"/>
 </menu>

@@ -56,10 +56,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:strokeColor="#E0E0E0"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="#FF7A1A"
+            app:strokeColor="#CC5E10"
             app:strokeWidth="1dp">
 
             <LinearLayout
@@ -68,194 +68,290 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <!-- Row: Read Page -->
+                <LinearLayout
+                    android:id="@+id/rowReadPage"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:background="?attr/selectableItemBackground"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_menu_info_details"
+                        android:tint="#FFFFFFFF"
+                        android:layout_marginEnd="12dp" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Read Page"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#FFFFFF33" />
+
+                <!-- Row: Auto Read switch -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_height="48dp"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="12dp">
-
+                    android:orientation="horizontal"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp">
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@android:drawable/ic_lock_silent_mode_off"
-                        android:tint="#1976D2"
-                        android:layout_marginEnd="8dp"
-                        android:contentDescription="Audio and Speech Icon" />
-
+                        android:tint="#FFFFFFFF"
+                        android:layout_marginEnd="12dp" />
                     <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Auto Read"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="16sp" />
+                    <Switch
+                        android:id="@+id/switchAutoRead"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Audio and Speech"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="#1976D2" />
-
+                        android:thumbTint="#FFFFFFFF"
+                        android:trackTint="#FFFFFF55" />
                 </LinearLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnStartTTS"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:text="Start Text-to-Speech"
-                    android:textSize="14sp"
-                    android:layout_marginBottom="8dp"
-                    android:backgroundTint="#1976D2"
-                    app:cornerRadius="6dp"
-                    app:icon="@android:drawable/ic_media_play"
-                    app:iconGravity="textStart"
-                    app:iconTint="@android:color/white"
-                    android:contentDescription="Start Text-to-Speech Reading" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#FFFFFF33" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnStopAudio"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:text="Stop Audio"
-                    android:textSize="14sp"
-                    android:backgroundTint="#D32F2F"
-                    app:cornerRadius="6dp"
-                    app:icon="@android:drawable/ic_media_pause"
-                    app:iconGravity="textStart"
-                    app:iconTint="@android:color/white"
-                    android:contentDescription="Stop Audio" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Visual Accessibility Card -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:strokeColor="#E0E0E0"
-            app:strokeWidth="1dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
+                <!-- Row: Cursor Reading switch -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_height="48dp"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="12dp">
+                    android:orientation="horizontal"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_menu_compass"
+                        android:tint="#FFFFFFFF"
+                        android:layout_marginEnd="12dp" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Cursor Reading"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="16sp" />
+                    <Switch
+                        android:id="@+id/switchCursorReading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:thumbTint="#FFFFFFFF"
+                        android:trackTint="#FFFFFF55" />
+                </LinearLayout>
 
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#FFFFFF33" />
+
+                <!-- Visual Accessibility Card -->
+                <!-- Row: Text Larger -->
+                <LinearLayout
+                    android:id="@+id/btnTextLarger"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:background="?attr/selectableItemBackground"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_input_add"
+                        android:tint="#FFFFFFFF"
+                        android:layout_marginEnd="12dp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Text Larger"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#FFFFFF33" />
+
+                <!-- Row: Text Smaller -->
+                <LinearLayout
+                    android:id="@+id/btnTextSmaller"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:background="?attr/selectableItemBackground"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_delete"
+                        android:tint="#FFFFFFFF"
+                        android:layout_marginEnd="12dp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Text Smaller"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#FFFFFF33" />
+
+                <!-- Row: Contrast value -->
+                <LinearLayout
+                    android:id="@+id/rowContrast"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp">
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@android:drawable/ic_menu_view"
-                        android:tint="#1976D2"
-                        android:layout_marginEnd="8dp"
-                        android:contentDescription="Visual Accessibility Icon" />
-
+                        android:tint="#FFFFFFFF"
+                        android:layout_marginEnd="12dp" />
                     <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Contrast"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/textContrastValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Visual Accessibility"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="#1976D2" />
-
+                        android:text="Normal"
+                        android:textColor="#FFEBD6"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnHighContrast"
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#FFFFFF33" />
+
+                <!-- Row: Colors value -->
+                <LinearLayout
+                    android:id="@+id/rowColors"
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:text="High Contrast Mode"
-                    android:textSize="14sp"
-                    android:layout_marginBottom="8dp"
-                    android:backgroundTint="#1976D2"
-                    app:cornerRadius="6dp"
-                    app:icon="@android:drawable/ic_menu_view"
-                    app:iconGravity="textStart"
-                    app:iconTint="@android:color/white"
-                    android:contentDescription="Toggle High Contrast Mode" />
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_menu_manage"
+                        android:tint="#FFFFFFFF"
+                        android:layout_marginEnd="12dp" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Colors"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/textColorsValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Normal"
+                        android:textColor="#FFEBD6"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnIncreaseTextSize"
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#FFFFFF33" />
+
+                <!-- Row: Language selector -->
+                <LinearLayout
+                    android:id="@+id/rowLanguage"
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:text="Increase Text Size"
-                    android:textSize="14sp"
-                    android:layout_marginBottom="8dp"
-                    android:backgroundTint="#1976D2"
-                    app:cornerRadius="6dp"
-                    app:icon="@android:drawable/ic_menu_edit"
-                    app:iconGravity="textStart"
-                    app:iconTint="@android:color/white"
-                    android:contentDescription="Increase Text Size" />
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:background="?attr/selectableItemBackground">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_menu_sort_alphabetically"
+                        android:tint="#FFFFFFFF"
+                        android:layout_marginEnd="12dp" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Language"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/textLanguageValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="English"
+                        android:textColor="#FFEBD6"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnReadingGuide"
-                    android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:text="Reading Guide"
-                    android:textSize="14sp"
-                    android:layout_marginBottom="8dp"
-                    android:backgroundTint="#1976D2"
-                    app:cornerRadius="6dp"
-                    app:icon="@android:drawable/ic_menu_help"
-                    app:iconGravity="textStart"
-                    app:iconTint="@android:color/white"
-                    android:contentDescription="Toggle Reading Guide" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnReadPage"
-                    android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:text="Read Page Content"
-                    android:textSize="14sp"
-                    android:backgroundTint="#1976D2"
-                    app:cornerRadius="6dp"
-                    app:icon="@android:drawable/ic_menu_info_details"
-                    app:iconGravity="textStart"
-                    app:iconTint="@android:color/white"
-                    android:contentDescription="Read Page Content Aloud" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Reset Settings Card -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:strokeColor="#E0E0E0"
-            app:strokeWidth="1dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
+                <!-- Reset Settings Card -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnResetAccessibility"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
-                    android:text="Reset All Settings"
+                    android:layout_marginTop="12dp"
+                    android:text="Reset All"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
                     android:textSize="14sp"
-                    android:backgroundTint="#FF6F00"
-                    app:cornerRadius="6dp"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#D84343"
+                    app:cornerRadius="8dp"
                     app:icon="@android:drawable/ic_menu_revert"
-                    app:iconGravity="textStart"
-                    app:iconTint="@android:color/white"
-                    android:contentDescription="Reset All Accessibility Settings" />
+                    app:iconTint="@android:color/white" />
+                
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnStopReading"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Stop Reading"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#616161"
+                    app:cornerRadius="8dp"
+                    app:icon="@android:drawable/ic_media_pause"
+                    app:iconTint="@android:color/white" />
+                
+                <TextView
+                    android:id="@+id/textFooterStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Font: 100% | Normal | Auto: OFF"
+                    android:textColor="#FFEBD6"
+                    android:textSize="12sp"
+                    android:gravity="center" />
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
+

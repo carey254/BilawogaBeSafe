@@ -3,19 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@android:color/white">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Emergency Services"
+        android:text="@string/emergency_help_center_kenya"
         android:textSize="20sp"
         android:textStyle="bold"
         android:gravity="center"
         android:layout_marginBottom="16dp"
         android:textColor="#D32F2F"/>
 
-    <!-- Uganda Police -->
+    <!-- Kenya Police -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,94 +27,154 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Uganda Police"
+            android:text="@string/kenya_police"
             android:textSize="16sp"
             android:textColor="#212121"/>
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="999 / 112"
+            android:text="@string/police_numbers"
             android:textColor="#FFFFFF"
             android:backgroundTint="#D32F2F"
             android:onClick="onEmergencyCall"
             android:tag="tel:999"/>
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/police_description"
+        android:textSize="12sp"
+        android:textColor="#616161"
+        android:layout_marginBottom="8dp"/>
 
-    <!-- Ambulance Services -->
+    <!-- Ambulance: St John / Red Cross -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="12px">
+        android:layout_marginBottom="12dp">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Ambulance &amp; Fire"
+            android:text="@string/ambulance_st_john"
             android:textSize="16sp"
             android:textColor="#212121"/>
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0800121222"
+            android:text="@string/ambulance_number"
             android:textColor="#FFFFFF"
             android:backgroundTint="#D32F2F"
             android:onClick="onEmergencyCall"
-            android:tag="tel:0800121222"/>
+            android:tag="tel:1199"/>
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ambulance_description"
+        android:textSize="12sp"
+        android:textColor="#616161"
+        android:layout_marginBottom="8dp"/>
 
-    <!-- Kidnapping Emergency -->
+    <!-- Gender-Based Violence (GBV) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="12px">
+        android:layout_marginBottom="12dp">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Kidnapping Emergency"
+            android:text="@string/gbv_helpline"
             android:textSize="16sp"
             android:textColor="#212121"/>
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0800199990"
+            android:text="@string/gbv_number"
             android:textColor="#FFFFFF"
             android:backgroundTint="#D32F2F"
             android:onClick="onEmergencyCall"
-            android:tag="tel:0800199990"/>
+            android:tag="tel:1195"/>
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/gbv_description"
+        android:textSize="12sp"
+        android:textColor="#616161"
+        android:layout_marginBottom="8dp"/>
 
-    <!-- Women & Child Protection -->
+    <!-- Child Helpline -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="12px">
+        android:layout_marginBottom="12dp">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Women &amp; Child Protection"
+            android:text="@string/child_helpline"
             android:textSize="16sp"
             android:textColor="#212121"/>
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0800199195"
+            android:text="@string/child_helpline_number"
             android:textColor="#FFFFFF"
             android:backgroundTint="#D32F2F"
             android:onClick="onEmergencyCall"
-            android:tag="tel:0800199195"/>
+            android:tag="tel:116"/>
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/child_helpline_description"
+        android:textSize="12sp"
+        android:textColor="#616161"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Health Hotline (Ministry of Health) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/health_hotline"
+            android:textSize="16sp"
+            android:textColor="#212121"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/health_hotline_number"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#D32F2F"
+            android:onClick="onEmergencyCall"
+            android:tag="tel:719"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/health_hotline_description"
+        android:textSize="12sp"
+        android:textColor="#616161"
+        android:layout_marginBottom="8dp"/>
 
     <View
         android:layout_width="match_parent"
@@ -124,7 +185,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="In case of emergency, please use these official numbers to get immediate assistance."
+        android:text="@string/mental_health_tip"
         android:textSize="12sp"
         android:textColor="#757575"
         android:gravity="center"

@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.example.bilawoga.R;
+import com.bilawoga.safety.R;
 
 public class CountdownDialog {
     private AlertDialog dialog;

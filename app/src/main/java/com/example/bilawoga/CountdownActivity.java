@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.bilawoga.safety.R;
 import com.example.bilawoga.utils.SOSHelper;
 import com.example.bilawoga.utils.SecureStorageManager;
 
@@ -30,6 +31,10 @@ public class CountdownActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // SECURITY: Prevent screenshots and screen recording
+        com.example.bilawoga.utils.ScreenSecurityManager.preventScreenshots(this);
+        
         setContentView(R.layout.activity_countdown);
 
         TextView title = findViewById(R.id.title);
@@ -53,20 +58,13 @@ public class CountdownActivity extends AppCompatActivity {
 
     private void doSend() {
         SharedPreferences prefs = SecureStorageManager.getEncryptedSharedPreferences(this);
-        boolean testMode = prefs != null && prefs.getBoolean("TEST_MODE", false);
 
         String user = getIntent().getStringExtra(EXTRA_USER);
         String incident = getIntent().getStringExtra(EXTRA_INCIDENT);
         String em1 = getIntent().getStringExtra(EXTRA_EM1);
         String em2 = getIntent().getStringExtra(EXTRA_EM2);
 
-        if (testMode) {
-            // Skip real send in test mode
-            android.widget.Toast.makeText(this, "Test Mode: SOS not sent", android.widget.Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
-
+        // Send SOS immediately to protect user
         SOSHelper helper = new SOSHelper(this);
         helper.sendEmergencySOS(user, incident, em1, em2);
         finish();

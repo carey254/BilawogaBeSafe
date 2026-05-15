@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BilaWoga</string>
+    <string name="settings_title">Mipangilio</string>
+    <string name="ai_monitoring_title">Ufuatiliaji wa AI</string>
+    <string name="ai_monitoring_summary">Washa ugunduzi wa dharura unaotegemea AI</string>
+    <string name="ai_monitoring_description">Hutumia AI kugundua hali za dharura kulingana na mifumo ya harakati na uchambuzi wa sauti. Inahitaji ruhusa ya kufikia sensa za harakati na mikrofoni.</string>
+    <string name="privacy_policy_link">Sera ya Faragha</string>
+    <string name="ai_monitoring_enabled">Ufuatiliaji wa AI umeanzishwa</string>
+    <string name="ai_monitoring_disabled">Ufuatiliaji wa AI umezimwa</string>
+    <string name="ai_monitoring_permission_required">Ruhusa ya ufuatiliaji wa AI inahitajika kwa kipengele hiki</string>
+    <string name="ai_monitoring_permission_rationale">Ili kugundua dharura, BilaWoga inahitaji ufikiaji wa sensa za harakati na mikrofoni. Data yako inabaki kwenye kifaa chako na haishirikiwi kamwe bila ruhusa yako.</string>
+    <string name="enter_number_to_nsend_sms_nin_nemergency">Ingiza Nambari Ili\nKutuma SMS\nKatika\nDHARURA!</string>
+    <string name="Start">Anza</string>
+    <string name="Stop">Acha</string>
+    <string name="send_emergencyalert">Tuma Maonyo ya Dharura</string>
+    <string name="Send_Emergency_Alert">Tuma Maonyo ya Dharura</string>
+    <string name="optional_enter_an_emergency_contact">Hiari: Ingiza mawasiliano ya dharura</string>
+    
+    <!-- Swahili Privacy Policy Summary -->
+    <string name="privacy_policy_summary">
+        <![CDATA[
+        <h2>Muhtasari wa Sera ya Faragha</h2>
+        <p><strong>Faragha na usalama wako ni kipaumbele chetu cha kwanza.</strong></p>
+        
+        <h3>Tunachokusanya:</h3>
+        <ul>
+            <li><strong>Taarifa za Kibinafsi:</strong> Jina lako na nambari za mawasiliano ya dharura</li>
+            <li><strong>Taarifa za Eneo:</strong> Tu wakati unapoanzisha SOS (kwa majibu ya dharura)</li>
+            <li><strong>Taarifa za Kifaa:</strong> Maelezo ya msingi ya kifaa kwa utendakazi wa programu</li>
+        </ul>
+        
+        <h3>Jinsi Tunakulinda:</h3>
+        <ul>
+            <li><strong>Uhifadhi wa Ndani:</strong> Data zote zimehifadhiwa kwa usalama kwenye kifaa chako</li>
+            <li><strong>Nakala ya Wingu Iliyoimbwa:</strong> Nakala ya hiari iliyoimbwa mwisho-hadi-mwisho inawezesha kurejesha kiotomatiki kwenye kifaa hiki peke yake</li>
+            <li><strong>Data Iliyoimbwa:</strong> Taarifa zote nyeti zimeimbwa wakati wa kupumzika na kwenye nakala</li>
+            <li><strong>Dharura Tu:</strong> Taarifa za eneo zinashirikiwa tu wakati unapoanzisha SOS</li>
+            <li><strong>Hali ya Siri:</strong> Ujumbe wa SOS hutumwa kwa kimya bila dalili inayoonekana kwenye kifaa chako kwa usalama wa juu</li>
+            <li><strong>Kumbukumbu ya Kimya:</strong> Matukio yote ya dharura yanawekwa kumbukumbu kwa usalama kwa ajili ya ukaguzi wako unapokuwa salama (angalia sehemu 4.3 ya Sera ya Faragha kwa jinsi ya kuona kumbukumbu)</li>
+        </ul>
+        
+        <h3>Haki Zako:</h3>
+        <ul>
+            <li>Pata na sasisha taarifa zako wakati wowote</li>
+            <li>Futa data yako kabisa kutoka kwenye programu</li>
+            <li>Dhibiti wakati taarifa za eneo zinashirikiwa</li>
+            <li>Hakuna kushiriki data na watu wa tatu</li>
+        </ul>
+        
+        <p><strong>Muhimu:</strong> Programu hii imeundwa kwa hali za dharura. Usalama wako ni wa kwanza, na tunahakikisha faragha yako inalindwa wakati unapotoa vipengele vya kuokoa maisha.</p>
+        ]]>
+    </string>
+
+    <!-- Swahili Terms of Use Summary -->
+    <string name="terms_of_use_summary">
+        <![CDATA[
+        <h2>Muhtasari wa Masharti ya Matumizi</h2>
+        <p><strong>BilaWoga imeundwa kwa ulinzi wa dharura tu.</strong></p>
+        
+        <h3>Kukubali Masharti:</h3>
+        <p>Kwa kutumia BilaWoga, unakubali masharti haya na unatambua kuwa programu hii ni kwa hali za dharura tu.</p>
+        
+        <h3>Matumizi ya Dharura Tu:</h3>
+        <ul>
+            <li>Tumia tu kwa hali za dharura za kweli</li>
+            <li>Maonyo ya uwongo hupoteza rasilimali za dharura na yanaweza kuwa haramu</li>
+            <li>Programu hii inaongeza, haibadilishi, huduma za dharura za jadi</li>
+        </ul>
+        
+        <h3>Jukumu Lako:</h3>
+        <ul>
+            <li>Weka mawasiliano ya dharura yako yamekamilika na sahihi</li>
+            <li>Tumia programu kwa uangalifu na kisheria</li>
+            <li>Jaribu vipengele kwa usalama (tumia hali ya majaribio inapopatikana)</li>
+            <li>Ripoti matatizo yoyote ya kiufundi haraka</li>
+        </ul>
+        
+        <h3>Vikwazo Muhimu:</h3>
+        <ul>
+            <li>Upatikanaji wa programu unategemea uunganishaji wa kifaa na mtandao</li>
+            <li>Daima uwe na njia mbadala za mawasiliano ya dharura</li>
+            <li>Hatuna jukumu kwa kutopatikana kwa programu wakati wa dharura</li>
+            <li>Fuata itifaki na sheria za dharura za ndani</li>
+        </ul>
+        
+        <h3>Matumizi Yanayopigwa Marufuku:</h3>
+        <ul>
+            <li>Maonyo ya dharura ya uwongo</li>
+            <li>Ukatili au unyanyasaji wa mawasiliano ya dharura</li>
+            <li>Shughuli zozote haramu</li>
+            <li>Matumizi ya kibiashara au yasiyo ya dharura</li>
+        </ul>
+        
+        <p><strong>Kwa kukubali masharti haya, unatambua kuwa unaelewa lengo la programu na utaitumia kwa uangalifu kwa hali za dharura za kweli tu.</strong></p>
+        ]]>
+    </string>
+    
+    <!-- RegisterNumberActivity Strings -->
+    <string name="emergency_contact_setup">Usanidi wa Mawasiliano ya Dharura</string>
+    <string name="review_privacy_policy">Angalia Sera ya Faragha</string>
+    <string name="please_review_privacy_policy">Tafadhali angalia Sera yetu ya Faragha kwenye menyu (⋮)</string>
+    <string name="configure_emergency_contacts">Sanidi mawasiliano yako ya dharura kwa msaada wa haraka</string>
+    <string name="security_information">Taarifa za Usalama</string>
+    <string name="security_info_description">Taarifa zote za mawasiliano ya dharura zimesimbwa na kuhifadhiwa kwa usalama kwenye kifaa chako. Data hii inapatikana kwako peke yako na inalindwa kwa usimbaji wa AES-256.</string>
+    <string name="enter_your_full_name">Ingiza jina lako kamili</string>
+    <string name="primary_emergency_contact">Nambari ya mawasiliano ya dharura ya kwanza</string>
+    <string name="secondary_emergency_contact">Nambari ya mawasiliano ya dharura ya pili (hiari)</string>
+    <string name="type_of_emergency">Aina ya Dharura</string>
+    <string name="describe_emergency_type">Eleza aina ya dharura (ikiwa haijaorodheshwa hapo juu)</string>
+    <string name="save_emergency_contacts">Hifadhi Mawasiliano ya Dharura</string>
+    <string name="update_contacts_anytime">Unaweza kusasisha mawasiliano haya wakati wowote kutoka skrini kuu</string>
+    <string name="select_emergency_type">Chagua Aina ya Dharura</string>
+    
+    <!-- Incident Types -->
+    <string name="incident_no_emergency">Hakuna Dharura ya Sasa (Salama na Imelindwa)</string>
+    <string name="incident_abduction">Kutekwa (kuchukuliwa kwa nguvu au kuibiwa)</string>
+    <string name="incident_sexual_assault">Ukosefu wa Haki wa Kijinsia / Udhihirishaji (kugusa kisichotakiwa au maoni ya kingono)</string>
+    <string name="incident_domestic_violence">Ukatili wa Nyumbani (unyanyasaji kutoka kwa familia au mpenzi)</string>
+    <string name="incident_medical_emergency">Dharura ya Matibabu (tatizo la afya la kubwa au jeraha)</string>
+    <string name="incident_other">Nyingine (Eleza Hapa Chini)</string>
+    
+    <!-- Error Messages -->
+    <string name="emergency_number_required">Nambari ya dharura inahitajika</string>
+    <string name="invalid_phone_length">Urefu usiohalali wa nambari ya simu (%1$d-%2$d tarakimu)</string>
+    <string name="invalid_phone_format">Muundo usiohalali wa nambari ya simu</string>
+    <string name="invalid_characters_detected">Herufi zisizokubalika zimegunduliwa kwenye nambari ya simu</string>
+    <string name="use_personal_emergency_contact">Tafadhali tumia nambari ya mawasiliano ya dharura ya kibinafsi</string>
+    <string name="please_enter_full_name">Tafadhali Ingiza Jina Lako Kamili</string>
+    <string name="name_min_length">Jina lazima liwe angalau %1$d herufi</string>
+    <string name="name_max_length">Jina lazima liwe chini ya %2$d herufi</string>
+    <string name="name_invalid_characters">Jina lina herufi zisizokubalika</string>
+    <string name="name_only_letters">Jina linaweza kuwa na herufi, nafasi, alama za kistari, na alama za apostrofi peke yake</string>
+    <string name="emergency_numbers_same">Nambari za dharura haziwezi kuwa sawa</string>
+    <string name="incident_description_too_long">Maelezo ya tukio ni mrefu sana</string>
+    <string name="at_least_one_emergency_required">Angalau nambari moja ya dharura inahitajika</string>
+    <string name="invalid_phone_number_format">Muundo usiohalali wa nambari ya simu!</string>
+    
+    <!-- Success Messages -->
+    <string name="contact_saved_successfully">Mawasiliano yamehifadhiwa kwa mafanikio!</string>
+    <string name="emergency_contacts_saved_successfully">Mawasiliano ya Dharura Yamehifadhiwa Kwa Mafanikio!</string>
+    <string name="emergency_contacts_saved_securely">Mawasiliano ya Dharura Yamehifadhiwa Kwa Usalama!</string>
+    <string name="number_may_not_be_reachable">Onyo: Nambari inaweza isipatikane. Tafadhali thibitisha.</string>
+    
+    <!-- Other Messages -->
+    <string name="secure_storage_unavailable">Hifadhi salama haipatikani; inaendesha katika hali ya majaribio.</string>
+    <string name="please_check_name_and_numbers">Tafadhali angalia jina lako na nambari za dharura</string>
+    <string name="save_button_clicked">Kitufe cha Hifadhi kimebofya</string>
+    <string name="error_form_fields_not_initialized">Kosa: Sehemu za fomu hazijaanzishwa</string>
+    <string name="please_wait_before_submitting">Tafadhali subiri kabla ya kuwasilisha tena</string>
+    <string name="please_select_emergency_type">Tafadhali chagua au eleza aina ya dharura</string>
+    <string name="invalid_emergency_data">Data ya dharura isiyo halali imegunduliwa</string>
+    <string name="error_saving_contacts">Kosa wakati wa kuhifadhi mawasiliano ya dharura!</string>
+    
+    <!-- MainActivity Strings -->
+    <string name="bilawoga_safety">Usalama wa BilaWoga</string>
+    <string name="emergency_contacts">Mawasiliano ya Dharura</string>
+    <string name="sos_will_be_sent_to_n">SOS Itatumwa Kwa\n</string>
+    <string name="show_hide">Onyesha/Ficha</string>
+    <string name="send_emergency_alert">Tuma Maonyo ya Dharura</string>
+    <string name="stop">Acha</string>
+    
+    <!-- Onboarding Strings -->
+    <string name="welcome_to_bilawoga">Karibu BilaWoga</string>
+    <string name="your_safety_priority">Usalama wako ni kipaumbele chetu cha kwanza</string>
+    <string name="onboarding_steps">1. Angalia Sera ya Faragha\n2. Soma Masharti ya Matumizi\n3. Kubali na thibitisha\n4. Sanidi mawasiliano ya dharura</string>
+    
+    <!-- Accessibility Strings -->
+    <string name="reading_stopped">Kusoma kumesitishwa</string>
+    <string name="all_settings_reset">Mipangilio yote imerejeshwa</string>
+    <string name="text_to_speech_not_available">Maandishi-hadi-hotuba hayapatikani</string>
+    
+    <!-- TTS Strings -->
+    <string name="selected_tts_voice_missing">Sauti ya TTS iliyochaguliwa haipo. Tafadhali sakinisha data ya sauti kwenye mipangilio.</string>
+    <string name="reading_page_content">Kusoma Maudhui ya Ukurasa</string>
+    <string name="auto_read_on">Kusoma Kiotomatiki WASHI</string>
+    <string name="auto_read_off">Kusoma Kiotomatiki ZIMA</string>
+    <string name="cursor_reading_on">Kusoma kwa Kielelezo WASHI</string>
+    <string name="cursor_reading_off">Kusoma kwa Kielelezo ZIMA</string>
+    <string name="text_larger">Maandishi Makubwa</string>
+    <string name="text_smaller">Maandishi Madogo</string>
+    
+    <!-- Additional MainActivity Strings -->
+    <string name="all_permissions_granted">Ruhusa zote zimekubaliwa! Kuanza huduma ya SOS…</string>
+    <string name="some_permissions_denied">Baadhi ya ruhusa zimekataliwa. Tafadhali zikubali kwenye Mipangilio.</string>
+    <string name="failed_to_send_sms">Kushindwa kutuma SMS: %1$s</string>
+    <string name="test_mode_on">Hali ya Majaribio IMEWASHI</string>
+    <string name="test_mode_enabled">Hali ya Majaribio IMEWASHI</string>
+    <string name="test_mode_disabled">Hali ya Majaribio IMEZIMWA</string>
+    <string name="privacy_policy">Sera ya Faragha</string>
+    <string name="terms_of_use">Masharti ya Matumizi</string>
+    <string name="activity_log">Kumbukumbu ya Shughuli</string>
+    <string name="panic_wipe_requested">Ufutaji wa dharura umeombwa</string>
+    <string name="log_out">Toka</string>
+    <string name="log_out_message">Je, ungependa kuweka mawasiliano yako ya dharura na mipangilio kwenye kifaa hiki?</string>
+    <string name="erase_now">Futa sasa</string>
+    <string name="back_up_to_cloud_log_out">Nakala ya wingu na toka</string>
+    <string name="cancel">Ghairi</string>
+    <string name="data_erased_logged_out">Data imefutwa na umetoka</string>
+    <string name="secure_storage_not_available">Hifadhi salama haipatikani</string>
+    <string name="backup_complete_logging_out">Nakala imekamilika. Kutoka…</string>
+    <string name="backup_failed">Nakala imeshindwa: %1$s</string>
+    <string name="backup_failed_fid">Nakala imeshindwa (FID): %1$s</string>
+    <string name="anonymous_sign_in_failed">Kuingia bila jina kumeshindwa: %1$s</string>
+    <string name="unable_to_show">Hawezi kuonyesha %1$s</string>
+    <string name="logout">Toka</string>
+    <string name="logout_message">Ukikubali kutoka, data yako iliyohifadhiwa (pamoja na mawasiliano ya dharura) itafutwa kutoka kwenye kifaa hiki. Je, ungependa kuendelea?</string>
+    <string name="logout_button">Toka</string>
+    <string name="you_have_been_logged_out">Umetoka. Data ya ndani imefutwa.</string>
+    <string name="contact_1">Mawasiliano 1: %1$s</string>
+    <string name="contact_2">Mawasiliano 2: %1$s</string>
+    <string name="no_emergency_contacts_saved">Hakuna mawasiliano ya dharura yaliyohifadhiwa. Nenda kwenye Badilisha Nambari ili kuongeza.</string>
+    <string name="ai_monitoring_enabled_enhanced">Ufuatiliaji wa AI umeanzishwa kwa usalama ulioimarika</string>
+    <string name="ai_monitoring_disabled_limited">Ufuatiliaji wa AI umezimwa. Baadhi ya vipengele vya usalama vinaweza kuwa vimepunguzwa.</string>
+    <string name="kenya_emergency_hotlines">Nambari za Dharura za Kenya:\n\n- Polisi: 999 / 112 / 911\n- Ambulensi: 999 / 112 / 911\n- Zima Moto: 999 / 112 / 911\n\nKidokezo: Ongeza mawasiliano ya dharura ya kibinafsi kwenye Mipangilio.</string>
+    <string name="emergency_services_kenya">Huduma za Dharura - Kenya</string>
+    <string name="close">Funga</string>
+    <string name="no_number_available">Hakuna nambari inayopatikana</string>
+    <string name="unable_to_open_dialer">Hawezi kufungua dialer</string>
+    <string name="confirm_sos">Thibitisha SOS</string>
+    <string name="sending_alert_in_seconds">Kutuma maonyo katika sekunde %1$d…</string>
+    <string name="send_now">Tuma sasa</string>
+    <string name="sos_canceled">SOS imeghairiwa</string>
+    <string name="user">Mtumiaji</string>
+    <string name="emergency">Dharura</string>
+    <string name="failed_to_send_sos">Kushindwa kutuma SOS</string>
+    <string name="sms_sent_successfully">SMS imetumwa kwa mafanikio</string>
+    <string name="message_sent_successfully">Ujumbe umetumwa</string>
+    <string name="alert_sent_successfully">Taarifa imetumwa kwa mafanikio</string>
+    <string name="sms_delivered">SMS imefikishwa</string>
+    <string name="generic_failure">Kushindwa kwa jumla</string>
+    <string name="no_service">Hakuna huduma</string>
+    <string name="null_pdu">Null PDU</string>
+    <string name="radio_off">Redio imezimwa</string>
+    <string name="rate_limit_exceeded">Kikomo cha kiwango kimezidi</string>
+    <string name="error_code">Msimbo wa kosa %1$d</string>
+    <string name="sms_permission_required">Ruhusa ya SMS inahitajika</string>
+    
+    <!-- Additional RegisterNumberActivity Strings -->
+    <string name="accessibility_options_closed">Chaguo za ufikivu zimefungwa</string>
+    <string name="font_status">Fonti: 100%% | Kawaida | Kiotomatiki: %1$s</string>
+    <string name="auto_on">WASHI</string>
+    <string name="auto_off">ZIMA</string>
+    <string name="name_field">Sehemu ya jina</string>
+    <string name="name_field_hint">Ingiza jina lako kamili kama linavyoonekana kwenye hati rasmi</string>
+    <string name="primary_emergency_contact_field">Sehemu ya mawasiliano ya dharura ya kwanza</string>
+    <string name="primary_emergency_contact_hint">Ingiza nambari ya simu ya mawasiliano yako ya dharura unaowajua zaidi</string>
+    <string name="secondary_emergency_contact_field">Sehemu ya mawasiliano ya dharura ya pili</string>
+    <string name="secondary_emergency_contact_hint">Ingiza nambari ya mawasiliano ya dharura mbadala kama nakala ya ziada</string>
+    <string name="custom_incident_description_field">Sehemu ya maelezo ya tukio maalum</string>
+    <string name="custom_incident_description_hint">Eleza aina yako maalum ya dharura ikiwa haijaorodheshwa hapo juu</string>
+    <string name="incident_type_dropdown">Menyu kushuka ya aina ya tukio</string>
+    <string name="incident_type_dropdown_hint">Chagua aina ya dharura unayotaka kuandaa</string>
+    <string name="your_name_is">Jina lako ni %1$s.</string>
+    <string name="emergency_number_one_is">Nambari ya dharura ya kwanza ni %1$s.</string>
+    <string name="emergency_number_two_is">Nambari ya dharura ya pili ni %1$s.</string>
+    <string name="incident_type_is">Aina ya tukio ni %1$s.</string>
+    <string name="error_opening_policy">Kosa wakati wa kufungua sera. Tafadhali jaribu tena.</string>
+    <string name="normal">Kawaida</string>
+    <string name="toggle_emergency_numbers_clicked">Kubadilisha nambari za dharura kimebofya</string>
+    
+    <!-- Onboarding Welcome Screen Strings -->
+    <string name="welcome_to_bilawoga_title">Karibu BilaWoga</string>
+    <string name="your_personal_emergency_protection_system">Mfumo Wako wa Ulinzi wa Dharura wa Kibinafsi</string>
+    <string name="language">Lugha</string>
+    <string name="app_description">BilaWoga hutumia AI ya hali ya juu kugundua dharura na kutuma msaada kiotomatiki unapohitaji zaidi. Usalama wako ni kipaumbele chetu cha kwanza.</string>
+    <string name="key_features">Vipengele Muhimu:</string>
+    <string name="key_features_list">Ulinzi wa Masaa 24/7\nUchunguzi wa AI\nMaonyo ya Dharura ya Kimya</string>
+    <string name="setup_process">Mchakato wa Usanidi:</string>
+    <string name="setup_steps">1. Angalia Sera ya Faragha\n2. Soma Masharti ya Matumizi\n3. Kubali na thibitisha\n4. Sanidi mawasiliano ya dharura</string>
+    <string name="start">ANZA</string>
+    <string name="restore_from_cloud">Rudisha kutoka Wingu</string>
+    <string name="tts">TTS</string>
+    <string name="restore_complete">Rudisha kumekamilika</string>
+    <string name="no_backup_found">Hakuna nakala ya ziada iliyopatikana</string>
+    <string name="restore_failed">Rudisha kumeshindwa</string>
+    
+    <!-- Policy Screen Strings -->
+    <string name="please_read_carefully">📖 Tafadhali soma taarifa hii kwa makini</string>
+    <string name="step_1_of_3">Hatua ya Kwanza</string>
+    <string name="step_2_of_3">Hatua ya Pili</string>
+    <string name="step_3_of_3">Hatua 3 ya 3</string>
+    <string name="back">Rudi</string>
+    <string name="i_accept_continue">Nakubali na Kuendelea</string>
+    <string name="policy_content_loaded">Maudhui ya sera yamepakuliwa</string>
+    <string name="error_loading_policy_content">Kosa wakati wa kupakua maudhui ya sera</string>
+    <string name="policy_accepted">Sera imekubaliwa</string>
+    <string name="reading_policy_content">Kusoma Maudhui ya Sera</string>
+    <string name="swahili">Kiswahili</string>
+    <string name="english">English</string>
+    
+    <!-- Final Step / Acceptance Screen -->
+    <string name="final_step">Hatua ya Mwisho</string>
+    <string name="please_confirm_acceptance">Tafadhali thibitisha ukubali wako</string>
+    <string name="to_complete_setup">Ili kukamilisha usanidi wako, tafadhali thibitisha kuwa umesoma na unakubali yafuatayo:</string>
+    <string name="i_have_read_privacy_policy">Nimesoma na kuelewa Sera ya Faragha</string>
+    <string name="i_have_read_terms_of_use">Nimesoma na kukubali Masharti ya Matumizi</string>
+    <string name="i_understand_emergency_use">Naelewa kuwa programu hii ni kwa matumizi ya dharura tu na nitaitumia kwa uangalifu</string>
+    <string name="important_notice">Onyo Muhimu</string>
+    <string name="by_accepting_acknowledge">Kwa kukubali, unathibitisha kuwa umesoma na kuelewa sera zote na unakubali kutumia BilaWoga kwa uangalifu kwa hali za dharura halisi tu.</string>
+    
+    <!-- MainActivity Strings -->
+    <string name="bilawoga_support">Msaada wa BilaWoga</string>
+    <string name="need_help_call_support">Unahitaji msaada? Piga simu ya msaada yetu: 0712 028 456</string>
+    <string name="call_support">Piga Msaada</string>
+    <string name="emergency_help_center">Kituo cha Msaada wa Dharura</string>
+    <string name="send_alert">Tuma Taarifa</string>
+    <string name="ai_protection">Ulinzi wa AI</string>
+    <string name="ai_monitoring_active">Ufuatiliaji wa AI unaendelea kwa ajili ya kugundua dharura</string>
+    <string name="setup_mode_active">🛡️ Hali ya Usanidi Inaendelea</string>
+    <string name="bilawoga_ready_message">BilaWoga iko tayari kwa dharura za baadaye. Vipengele vyote vinaendelea na viko tayari kutumika unapohitaji.</string>
+    <string name="emergency_help_center_kenya">Kituo cha Msaada wa Dharura (Kenya)</string>
+    <string name="kenya_police">Polisi wa Kenya</string>
+    <string name="police_numbers">999 / 112 / 911</string>
+    <string name="police_description">Udhibiti wa polisi kwa dharura zozote za kutisha maisha.</string>
+    <string name="ambulance_st_john">Ambulensi (St John/Msalaba Mwekundu)</string>
+    <string name="ambulance_number">1199</string>
+    <string name="ambulance_description">Ambulensi ya Msalaba Mwekundu wa Kenya na utumaji wa majibu ya maafa.</string>
+    <string name="gbv_helpline">Laini ya Msaada ya Ukatili wa Jinsia</string>
+    <string name="gbv_number">1195</string>
+    <string name="gbv_description">Msaada wa masaa 24/7 kwa walioathiriwa na ukatili wa jinsia.</string>
+    <string name="child_helpline">Laini ya Msaada ya Watoto</string>
+    <string name="child_helpline_number">116</string>
+    <string name="child_helpline_description">Laini ya ulinzi wa watoto kwa kuripoti unyanyasaji au watoto waliopotea.</string>
+    <string name="health_hotline">Laini ya Afya (Wizara ya Afya)</string>
+    <string name="health_hotline_number">719</string>
+    <string name="health_hotline_description">Maelekezo ya jumla ya matibabu na taarifa za rufaa.</string>
+    <string name="mental_health_tip">Kidokezo: Ikiwa unahitaji huduma za afya ya akili za kuendelea, pia ongeza mshauri/mtaalamu wako wa kibinafsi kwenye Mawasiliano katika programu.</string>
+    <string name="open_emergency_help_center">Fungua Kituo cha Msaada wa Dharura</string>
+    <string name="send_quick_emergency_alert">Tuma Taarifa ya Dharura Haraka</string>
+    <string name="open_accessibility_options">Fungua Chaguzi za Ufikiaji</string>
+    
+    <!-- Policy HTML Content -->
+    <string name="privacy_policy_html">
+        <![CDATA[
+        <h1>Programu ya Usalama ya BilaWoga - Sera ya Faragha</h1>
+        <p><strong>Imesasishwa Mwisho:</strong> Mei 2025</p>
+
+        <div class="important">
+            <strong>MUHIMU:</strong> Programu hii imeundwa kwa hali za dharura. Usalama wako ni kipaumbele chetu.
+        </div>
+
+        <div class="section">
+            <h2>1. Taarifa Tunazokusanya</h2>
+            <h3>1.1 Taarifa za Kibinafsi</h3>
+            <ul>
+                <li><strong>Jina:</strong> Jina lako kwa utambulisho wa dharura</li>
+                <li><strong>Mawasiliano ya Dharura:</strong> Nambari za simu za mawasiliano unaowajua kwa hali za dharura</li>
+                <li><strong>Taarifa za Eneo:</strong> Kuratibu za GPS wakati SOS inapoanzishwa</li>
+            </ul>
+
+            <h3>1.2 Taarifa za Kiufundi</h3>
+            <ul>
+                <li><strong>Taarifa za Kifaa:</strong> Maelezo ya msingi ya kifaa kwa utendakazi wa programu</li>
+                <li><strong>Matumizi ya Programu:</strong> Nyakati na marudio ya uanzishaji wa SOS (kwa kuzuia matumizi mabaya)</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>2. Jinsi Tunavyotumia Taarifa Zako</h2>
+            <ul>
+                <li><strong>Majibu ya Dharura:</strong> Tuma eneo lako na ujumbe wa dharura kwa mawasiliano yako</li>
+                <li><strong>Utendakazi wa Programu:</strong> Wezesha ugunduzi wa kutetemeka na vipengele vya SOS</li>
+                <li><strong>Usalama:</strong> Zuia matumizi mabaya ya programu na hakikisha matumizi halali ya dharura</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>3. Usalama wa Data</h2>
+            <div class="important">
+                <strong>Hatua za Usalama:</strong>
+                <ul>
+                    <li>Data zote zimehifadhiwa ndani kwenye kifaa chako</li>
+                    <li>Taarifa za eneo zinashirikiwa tu wakati unapoanzisha kipengele cha SOS</li>
+                    <li>Nakala ya wingu iliyoimbwa ya hiari inapatikana kurejesha data yako ikiwa utasakinisha tena au kuingia tena</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>4. Hali ya Siri na Uwekaji wa Kumbukumbu wa Kimya</h2>
+            <div class="important">
+                <strong>Usalama Wako Ni Kipaumbele Chetu:</strong>
+                <p>BilaWoga hutumia <strong>Hali ya Siri</strong> kukulinda wakati wa dharura. Unapotuma taarifa ya SOS, <strong>hakuna dalili inayoonekana kwenye kifaa chako</strong> - hakuna ujumbe, arifa, au uthibitishaji unaoonekana. Hii inahakikisha usalama wako kwa kuzuia kugunduliwa.</p>
+            </div>
+            
+            <h3>4.1 Jinsi Hali ya Siri Inavyofanya Kazi</h3>
+            <ul>
+                <li><strong>Kutuma SOS Kwa Kimya:</strong> Unapoanzisha SOS (kwa mikono, kwa kutetemeka kwa kifaa chako, au kupitia ugunduzi wa AI), ujumbe hutumwa moja kwa moja kwa mawasiliano yako unaowajua bila dalili yoyote inayoonekana kwenye simu yako</li>
+                <li><strong>Hakuna UI ya Programu ya SMS:</strong> Ujumbe hutumwa moja kwa moja kwenye mtandao wa kampuni ya simu, ukizipita programu zote za SMS</li>
+                <li><strong>Kurekodi Sauti Kiotomatiki:</strong> Unapoanzisha SOS, programu hurekodi sekunde 10 za sauti kiotomatiki na kuzituma kwa mawasiliano yako unaowajua</li>
+                <li><strong>Kujaribu Tena Kiotomatiki:</strong> Ikiwa kutuma kumeshindwa, programu hujaribu tena hadi mara 5 ili kuhakikisha uwasilishaji</li>
+            </ul>
+            
+            <h3>4.2 Mfumo wa Kumbukumbu wa Kimya</h3>
+            <p>Matukio yote ya dharura yanawekwa kumbukumbu kwa usalama na kimya kwa ajili ya ukaguzi wako unapokuwa salama:</p>
+            <ul>
+                <li><strong>Uhifadhi Ulioimbwa:</strong> Kumbukumbu zote zimehifadhiwa kwa muundo ulioimbwa kwenye kifaa chako kwa kutumia usimbaji wa AES-256-GCM</li>
+                <li><strong>Kile Kinachowekwa Kumbukumbu:</strong> Majaribio ya SOS, hali ya mafanikio/kushindwa, hali ya kurekodi sauti, majaribio ya kujaribu tena, na uthibitishaji wa uwasilishaji</li>
+                <li><strong>Faragha Imelindwa:</strong> Nambari za simu kwenye kumbukumbu zimefichwa (mfano: +2****56) kwa ajili ya faragha</li>
+                <li><strong>Hakuna Kushiriki Mtandao:</strong> Kumbukumbu hazitoki kifaa chako kamwe - zimehifadhiwa ndani tu</li>
+            </ul>
+            
+            <h3>4.3 Jinsi ya Kuona Kumbukumbu Zako za Dharura</h3>
+            <p><strong>Ili kuangalia ikiwa SOS yako imetumwa kwa mafanikio:</strong></p>
+            <ol>
+                <li>Fungua programu ya BilaWoga</li>
+                <li>Bofya ikoni ya menyu (⋮) kwenye kona ya juu-kulia</li>
+                <li>Chagua <strong>"Angalia Kumbukumbu ya Shughuli"</strong> au nenda kwenye <strong>"Mipangilio"</strong></li>
+                <li>Angalia kumbukumbu zako za dharura ili kuona:
+                    <ul>
+                        <li><code>EMERGENCY_SOS_SUCCESS</code> - Ujumbe umetumwa kwa mafanikio</li>
+                        <li><code>EMERGENCY_AUDIO_SENT</code> - Kurekodi sauti kumetumwa</li>
+                        <li><code>EMERGENCY_SOS_RETRY_SUCCESS</code> - Kujaribu tena kumefanikiwa</li>
+                        <li><code>EMERGENCY_SOS_FAILED</code> - Kutuma kumeshindwa (kutajaribu tena kiotomatiki)</li>
+                    </ul>
+                </li>
+            </ol>
+            <p><strong>Muhimu:</strong> Kumbukumbu zimehifadhiwa kwenye kifaa chako peke yake. Unaweza kuziangalia unapokuwa salama ili kuthibitisha kuwa SOS yako imetumwa na kupokelewa na mawasiliano yako unaowajua.</p>
+        </div>
+        ]]>
+    </string>
+
+    <string name="terms_of_use_html">
+        <![CDATA[
+        <h1>Programu ya Usalama ya BilaWoga - Masharti ya Matumizi</h1>
+        <p><strong>Imesasishwa Mwisho:</strong> Mei 2025</p>
+
+        <div class="important">
+            <strong>MUHIMU:</strong> Programu hii imekusudiwa kwa matumizi ya dharura tu. Matumizi mabaya yanaweza kusababisha matokeo ya kisheria.
+        </div>
+
+        <div class="section">
+            <h2>1. Kukubali Masharti</h2>
+            <p>Kwa kutumia Programu ya Usalama ya BilaWoga, unakubali Masharti haya ya Matumizi. Ukikataa, usitumie programu hii.</p>
+        </div>
+
+        <div class="section">
+            <h2>2. Matumizi ya Dharura Tu</h2>
+            <p>Programu hii imeundwa kwa hali za dharura. Maonyo ya uwongo hupoteza rasilimali za dharura na yanaweza kuwa haramu.</p>
+        </div>
+
+        <div class="section">
+            <h2>3. Majukumu ya Mtumiaji</h2>
+            <ul>
+                <li>Weka mawasiliano yako ya dharura yamekamilika</li>
+                <li>Tumia programu kwa uangalifu na tu katika hali za dharura za kweli</li>
+                <li>Usitumie programu kwa madhumuni yoyote haramu</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>4. Ahadi Yetu kwa Usalama Wako</h2>
+            <p>Tunaahidi kukupa zana ya usalama inayoweza kutegemewa. Hata hivyo, kama teknolojia zote, kunaweza kuwa na nyakati nadra ambapo programu haipatikani kwa muda kutokana na matatizo ya kiufundi au uunganishaji wa mtandao. Tunaendelea kufanya kazi ili kuhakikisha kiwango cha juu cha kutegemewa kwa usalama wako.</p>
+            <p><strong>Usalama Wako Ni Muhimu:</strong> Tunapendekeza kuwa na njia nyingi za kuwasiliana na huduma za dharura, kama vile kupiga nambari za dharura moja kwa moja. Programu hii imeundwa kukamilisha, si kuchukua nafasi ya, huduma za dharura za jadi.</p>
+        </div>
+        ]]>
+    </string>
+    
+    <!-- Onboarding Alert Content -->
+    <string name="privacy_policy_content">
+        <![CDATA[
+        <h2>Muhtasari wa Sera ya Faragha</h2>
+        <p>Faragha yako ni muhimu kwetu. Hapa kuna mambo muhimu ya sera yetu ya faragha:</p>
+        <ul>
+            <li>Data yako imehifadhiwa kwa usalama kwenye kifaa chako</li>
+            <li>Hatukusanyi au kuhifadhi taarifa zako za kibinafsi kwenye seva zetu</li>
+            <li>Taarifa za eneo zinatumika tu wakati unapoanzisha kipengele cha SOS</li>
+            <li>Hatushiriki taarifa zako na watu wa tatu</li>
+        </ul>
+        <p>Kwa sera kamili ya faragha, tafadhali tembelea tovuti yetu.</p>
+        ]]>
+    </string>
+    
+    <string name="terms_of_service_content">
+        <![CDATA[
+        <h2>Muhtasari wa Masharti ya Huduma</h2>
+        <p>Kwa kutumia BilaWoga, unakubali:</p>
+        <ul>
+            <li>Tumia programu tu kwa dharura za kweli</li>
+            <li>Weka mawasiliano yako ya dharura yamekamilika</li>
+            <li>Usitumie programu vibaya au kutuma maonyo ya uwongo</li>
+            <li>Uwe na jukumu kwa matumizi yoyote mabaya ya programu</li>
+        </ul>
+        <p>Kwa masharti kamili ya huduma, tafadhali tembelea tovuti yetu.</p>
+        ]]>
+    </string>
+</resources>

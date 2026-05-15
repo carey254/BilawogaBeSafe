@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Switch;
 import android.widget.Toast;
 import android.app.Dialog;
 
@@ -30,6 +31,7 @@ import android.view.ViewGroup;
 import android.os.Handler;
 import android.os.Looper;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.Voice;
 import android.telephony.PhoneNumberUtils;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -37,7 +39,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.button.MaterialButton;
+import com.bilawoga.safety.R;
 import com.example.bilawoga.utils.PolicyViewerActivity;
+import com.example.bilawoga.utils.TTSLanguageManager;
 // import com.example.bilawoga.utils.SOSHelper; // Temporarily commented out due to compilation issues
 
 import java.util.Locale;
@@ -76,33 +80,46 @@ public class RegisterNumberActivity extends AppCompatActivity {
     private boolean isAudioActive = false;
     private Handler audioHandler = new Handler(Looper.getMainLooper());
     private Runnable audioRunnable;
+    private boolean ttsReady = false;
+    private boolean pendingAutoRead = false;
 
-    private static final String[] INCIDENT_TYPES = {
-            "No Current Emergency (Safe and Secure)",
-            "Abduction (taken forcefully or kidnapped)",
-            "Sexual Assault / Harassment (unwanted touching or sexual comments)",
-            "Domestic Violence (abuse from family or partner)",
-            "Medical Emergency (serious health issue or injury)",
-            "Other (Specify Below)"
-    };
+    // Get localized incident types
+    private String[] getIncidentTypes() {
+        return new String[]{
+                getString(R.string.incident_no_emergency),
+                getString(R.string.incident_abduction),
+                getString(R.string.incident_sexual_assault),
+                getString(R.string.incident_domestic_violence),
+                getString(R.string.incident_medical_emergency),
+                getString(R.string.incident_other)
+        };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // SECURITY: Prevent screenshots and screen recording
+        com.example.bilawoga.utils.ScreenSecurityManager.preventScreenshots(this);
+        
+        // Set locale based on selected language
+        updateLocale();
+        
         setContentView(R.layout.activity_register_number);
+        TTSLanguageManager.initDefaultOnFirstLaunch(this);
         
         // Setup toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Emergency Contact Setup");
+            getSupportActionBar().setTitle(getString(R.string.emergency_contact_setup));
         }
         
         // Block app if encrypted storage is unavailable - TEMPORARY BYPASS TO SHOW UI
         SharedPreferences testPrefs = com.example.bilawoga.utils.SecureStorageManager.getEncryptedSharedPreferences(this);
         if (testPrefs == null) {
-            Toast.makeText(this, "Secure storage unavailable; running in test mode.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.secure_storage_unavailable), Toast.LENGTH_LONG).show();
             // Note: In production, restore the blocking dialog and exit for security.
         }
 
@@ -112,6 +129,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
         setupTextWatchers();
         setupAccessibilityFab();
         setupTextToSpeech();
+        // Auto-read will be triggered when TTS is ready (handled in setupTextToSpeech)
         setupFieldFocusListeners();
         
         // Set up privacy policy hint click listener
@@ -129,11 +147,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
         return true;
     }
 
-    // Added stub handler to prevent crash from android:onClick in layout
-    public void saveNumber(View view) {
-        Toast.makeText(this, "Saving...", Toast.LENGTH_SHORT).show();
-        // TODO: Implement actual save logic
-    }
+
 
 
     @Override
@@ -214,9 +228,10 @@ public class RegisterNumberActivity extends AppCompatActivity {
     private void setupSpinner() {
         if (incidentSpinner == null) return;
 
+        String[] incidentTypes = getIncidentTypes();
         IncidentTypeAdapter adapter = new IncidentTypeAdapter(
                 this,
-                INCIDENT_TYPES
+                incidentTypes
         );
         incidentSpinner.setAdapter(adapter);
 
@@ -224,7 +239,8 @@ public class RegisterNumberActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (manualIncidentInputLayout != null) {
-                    boolean isOtherSelected = INCIDENT_TYPES[position].equals("Other (Specify Below)");
+                    String[] incidentTypes = getIncidentTypes();
+                    boolean isOtherSelected = incidentTypes[position].equals(getString(R.string.incident_other));
                     manualIncidentInputLayout.setVisibility(isOtherSelected ? View.VISIBLE : View.GONE);
                     if (!isOtherSelected && manualIncidentEditText != null) {
                         manualIncidentEditText.setText("");
@@ -239,6 +255,15 @@ public class RegisterNumberActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    
+    // Update locale based on selected language
+    private void updateLocale() {
+        Locale selectedLocale = TTSLanguageManager.getSelectedLocale(this);
+        Locale.setDefault(selectedLocale);
+        android.content.res.Configuration config = getResources().getConfiguration();
+        config.setLocale(selectedLocale);
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 
     private void loadSavedData() {
@@ -279,8 +304,9 @@ public class RegisterNumberActivity extends AppCompatActivity {
 
         // Try to match saved incident with spinner items
         if (incidentSpinner != null) {
-            for (int i = 0; i < INCIDENT_TYPES.length; i++) {
-                if (INCIDENT_TYPES[i].equals(savedIncident)) {
+            String[] incidentTypes = getIncidentTypes();
+            for (int i = 0; i < incidentTypes.length; i++) {
+                if (incidentTypes[i].equals(savedIncident)) {
                     incidentSpinner.setSelection(i);
                     break;
                 }
@@ -288,7 +314,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
 
             // If no match found, select "Other" and show in manual input
             if (!TextUtils.isEmpty(savedIncident) && incidentSpinner.getSelectedItemPosition() == 0) {
-                incidentSpinner.setSelection(INCIDENT_TYPES.length - 1); // "Other" option
+                incidentSpinner.setSelection(incidentTypes.length - 1); // "Other" option
                 if (manualIncidentEditText != null) {
                     manualIncidentEditText.setText(savedIncident);
                 }
@@ -355,7 +381,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
         if (inputLayout == null) return false;
 
         if (TextUtils.isEmpty(number)) {
-            inputLayout.setError("Emergency number is required");
+            inputLayout.setError(getString(R.string.emergency_number_required));
             return false;
         }
 
@@ -377,25 +403,25 @@ public class RegisterNumberActivity extends AppCompatActivity {
         
         // Length validation
         if (cleanNumber.length() < MIN_PHONE_LENGTH || cleanNumber.length() > MAX_PHONE_LENGTH) {
-            inputLayout.setError("Invalid phone number length (" + MIN_PHONE_LENGTH + "-" + MAX_PHONE_LENGTH + " digits)");
+            inputLayout.setError(getString(R.string.invalid_phone_length, MIN_PHONE_LENGTH, MAX_PHONE_LENGTH));
             return false;
         }
         
         // Format validation
         if (!isValidPhoneNumberFormat(cleanNumber)) {
-            inputLayout.setError("Invalid phone number format");
+            inputLayout.setError(getString(R.string.invalid_phone_format));
             return false;
         }
         
         // SECURITY: Prevent SMS injection and malicious patterns
         if (containsMaliciousPatterns(number)) {
-            inputLayout.setError("Invalid characters detected in phone number");
+            inputLayout.setError(getString(R.string.invalid_characters_detected));
             return false;
         }
         
         // SECURITY: Check for common emergency numbers to prevent abuse
         if (isEmergencyServiceNumber(cleanNumber)) {
-            inputLayout.setError("Please use a personal emergency contact number");
+            inputLayout.setError(getString(R.string.use_personal_emergency_contact));
             return false;
         }
 
@@ -403,32 +429,74 @@ public class RegisterNumberActivity extends AppCompatActivity {
         return true;
     }
     
-    // SECURITY: Sanitize phone number input
+    // SECURITY: Sanitize phone number input and normalize to Kenyan format
     private String sanitizePhoneNumber(String number) {
-        if (number == null) return "";
-        // Remove all non-digit characters except + for international numbers
-        return number.replaceAll("[^+\\d]", "");
+        if (number == null || number.trim().isEmpty()) {
+            return "";
+        }
+        
+        // Remove spaces, dashes, parentheses, and other formatting
+        String sanitized = number.trim().replaceAll("[\\s\\-\\(\\)]", "");
+        
+        // Normalize Kenyan phone numbers to +254 format
+        // Accepts ALL Kenyan formats: +254XXXXXXXXX, 254XXXXXXXXX, 07XXXXXXXXX, 011XXXXXXXX, etc.
+        if (sanitized.startsWith("+254")) {
+            // Already in international format: +254XXXXXXXXX
+            return sanitized;
+        } else if (sanitized.startsWith("254") && sanitized.length() == 12) {
+            // 254XXXXXXXXX format - add +
+            return "+" + sanitized;
+        } else if (sanitized.startsWith("0") && sanitized.length() == 10) {
+            // 07XXXXXXXXX, 011XXXXXXXX, 020XXXXXXXX format - convert to +254
+            return "+254" + sanitized.substring(1);
+        } else if (sanitized.length() == 9 && sanitized.matches("^[17]\\d{8}$")) {
+            // 7XXXXXXXXX or 1XXXXXXXXX format (without leading 0) - add +254
+            return "+254" + sanitized;
+        }
+        
+        // Return as-is if already in international format or other country
+        return sanitized;
     }
     
     // SECURITY: Validate phone number format
     private boolean isValidPhoneNumberFormat(String number) {
-        // International format: +[country code][number]
-        // Local format: [country code][number]
-        // Kenyan format: +254..., 254..., 07..., 011..., etc.
+        // Accepts ALL Kenyan phone number formats:
+        // +254XXXXXXXXX (international with +)
+        // 254XXXXXXXXX (international without +)
+        // 07XXXXXXXXX (Safaricom/Airtel mobile)
+        // 011XXXXXXXX (landline)
+        // 020XXXXXXXX (landline)
+        // 7XXXXXXXXX (mobile without 0)
+        // 1XXXXXXXXX (mobile without 0)
+        // ALL Kenyan numbers work - Safaricom, Airtel, Telkom, Equitel, etc.
         
-        // More permissive pattern for Kenyan numbers
-        if (number.startsWith("+254") || number.startsWith("254")) {
-            // Kenyan international format
-            return number.matches("^\\+?254\\d{9}$");
-        } else if (number.startsWith("0")) {
-            // Kenyan local format starting with 0
-            return number.matches("^0\\d{8}$");
-        } else if (number.startsWith("7") || number.startsWith("1")) {
-            // Kenyan mobile numbers starting with 7 or 1
-            return number.matches("^[17]\\d{8}$");
-        } else {
-            // Generic international format
-            return number.matches("^\\+?[1-9]\\d{6,14}$");
+        if (number == null || number.trim().isEmpty()) {
+            return false;
+        }
+        
+        // Remove all non-digit characters except +
+        String cleanNumber = number.replaceAll("[^0-9+]", "");
+        
+        // Kenyan international format: +254 or 254 followed by 9 digits
+        if (cleanNumber.startsWith("+254") || cleanNumber.startsWith("254")) {
+            // Must be exactly +254 or 254 followed by 9 digits (total 12 or 13 characters)
+            String digitsOnly = cleanNumber.replace("+", "");
+            return digitsOnly.matches("^254\\d{9}$");
+        } 
+        // Kenyan local format: 0 followed by 9 digits (07XXXXXXXXX, 011XXXXXXXX, 020XXXXXXXX, etc.)
+        else if (cleanNumber.startsWith("0") && cleanNumber.length() == 10) {
+            // Accepts: 07XXXXXXXXX (mobile), 011XXXXXXXX (landline), 020XXXXXXXX (landline), etc.
+            return cleanNumber.matches("^0\\d{9}$");
+        } 
+        // Kenyan mobile without leading 0: 7XXXXXXXXX or 1XXXXXXXXX (9 digits)
+        else if (cleanNumber.length() == 9 && cleanNumber.matches("^[17]\\d{8}$")) {
+            // Mobile numbers starting with 7 or 1 (without leading 0)
+            return true;
+        } 
+        // Other valid formats
+        else {
+            // Generic international format for other countries
+            return cleanNumber.matches("^\\+?[1-9]\\d{6,14}$");
         }
     }
     
@@ -476,7 +544,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
         if (nameInputLayout == null) return false;
 
         if (TextUtils.isEmpty(name.trim())) {
-            nameInputLayout.setError("Please Enter Your Full Name");
+            nameInputLayout.setError(getString(R.string.please_enter_full_name));
             return false;
         }
         
@@ -484,24 +552,24 @@ public class RegisterNumberActivity extends AppCompatActivity {
         String sanitizedName = sanitizeName(name.trim());
         
         if (sanitizedName.length() < MIN_NAME_LENGTH) {
-            nameInputLayout.setError("Name must be at least " + MIN_NAME_LENGTH + " characters");
+            nameInputLayout.setError(getString(R.string.name_min_length, MIN_NAME_LENGTH));
             return false;
         }
         
         if (sanitizedName.length() > MAX_NAME_LENGTH) {
-            nameInputLayout.setError("Name must be less than " + MAX_NAME_LENGTH + " characters");
+            nameInputLayout.setError(getString(R.string.name_max_length, MAX_NAME_LENGTH));
             return false;
         }
         
         // SECURITY: Check for malicious patterns in name
         if (containsMaliciousPatterns(sanitizedName)) {
-            nameInputLayout.setError("Name contains invalid characters");
+            nameInputLayout.setError(getString(R.string.name_invalid_characters));
             return false;
         }
         
         // SECURITY: Validate name format (letters, spaces, hyphens, apostrophes only)
         if (!sanitizedName.matches("^[a-zA-Z\\s\\-']+$")) {
-            nameInputLayout.setError("Name can only contain letters, spaces, hyphens, and apostrophes");
+            nameInputLayout.setError(getString(R.string.name_only_letters));
             return false;
         }
         
@@ -528,9 +596,9 @@ public class RegisterNumberActivity extends AppCompatActivity {
             manualIncident = manualIncidentEditText.getText().toString().trim();
         }
 
-        if (selectedIncident.equals("Other (Specify Below)") && !TextUtils.isEmpty(manualIncident)) {
+        if (selectedIncident.equals(getString(R.string.incident_other)) && !TextUtils.isEmpty(manualIncident)) {
             return manualIncident;
-        } else if (!selectedIncident.equals("Select Incident Type")) {
+        } else if (!selectedIncident.equals(getString(R.string.select_emergency_type))) {
             return selectedIncident;
         }
         return "";
@@ -538,16 +606,16 @@ public class RegisterNumberActivity extends AppCompatActivity {
 
     public void saveNumber(View view) {
         Log.d("RegisterNumberActivity", "saveNumber called");
-        Toast.makeText(this, "Save button clicked", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.save_button_clicked), Toast.LENGTH_SHORT).show();
         // SECURITY: Rate limiting to prevent spam submissions
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastSubmissionTime < SUBMISSION_COOLDOWN) {
-            Snackbar.make(view, "Please wait before submitting again", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(view, getString(R.string.please_wait_before_submitting), Snackbar.LENGTH_SHORT).show();
             return;
         }
         
         if (nameEdit == null || numberEdit == null || number2Edit == null) {
-            Toast.makeText(this, "Error: Form fields not initialized", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.error_form_fields_not_initialized), Toast.LENGTH_LONG).show();
             return;
         }
         
@@ -575,7 +643,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
         }
         if (TextUtils.isEmpty(incident)) {
             Log.w(TAG, "Validation failed: incident type missing");
-            String errorMsg = "Please select or describe an emergency type";
+            String errorMsg = getString(R.string.please_select_emergency_type);
             Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
             Snackbar.make(view, errorMsg, Snackbar.LENGTH_LONG).show();
             speakErrorMessages(errorMsg);
@@ -583,7 +651,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
         }
         if (!isValid) {
             Log.w(TAG, "Validation failed: name or number invalid");
-            String errorMsg = "Please check your name and emergency numbers";
+            String errorMsg = getString(R.string.please_check_name_and_numbers);
             Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
             speakErrorMessages(errorMsg);
             return;
@@ -591,7 +659,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
         // SECURITY: Final validation before saving
         if (!validateEmergencyData(nameString, number1String, number2String, incident)) {
             Log.w(TAG, "Validation failed: emergency data invalid");
-            String errorMsg = "Invalid emergency data detected";
+            String errorMsg = getString(R.string.invalid_emergency_data);
             Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
             Snackbar.make(view, errorMsg, Snackbar.LENGTH_LONG).show();
             speakErrorMessages(errorMsg);
@@ -611,7 +679,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
                 editor.putLong("LAST_UPDATE_TIME", currentTime);
                 editor.apply();
                 Log.d(TAG, "Fallback save: USERNAME=" + nameString + ", ENUM_1=" + number1String + ", ENUM_2=" + number2String + ", INCIDENT_TYPE=" + incident);
-                String successMsg = "Emergency Contacts Saved Successfully!";
+                String successMsg = getString(R.string.emergency_contacts_saved_successfully);
                 Toast.makeText(this, successMsg, Toast.LENGTH_LONG).show();
                 Snackbar.make(view, successMsg, Snackbar.LENGTH_LONG).show();
                 speakSuccessMessages(successMsg);
@@ -629,7 +697,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
             editor.putLong("LAST_UPDATE_TIME", currentTime);
             editor.apply();
             Log.d(TAG, "Saved: USERNAME=" + nameString + ", ENUM_1=" + number1String + ", ENUM_2=" + number2String + ", INCIDENT_TYPE=" + incident);
-            String successMsg = "Emergency Contacts Saved Securely!";
+            String successMsg = getString(R.string.emergency_contacts_saved_securely);
             Toast.makeText(this, successMsg, Toast.LENGTH_LONG).show();
             Snackbar.make(view, successMsg, Snackbar.LENGTH_LONG).show();
             speakSuccessMessages(successMsg);
@@ -639,7 +707,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
             }, 1000);
         } catch (Exception e) {
             Log.e(TAG, "Error saving emergency data: " + e.getMessage());
-            String errorMsg = "Error saving emergency contacts!";
+            String errorMsg = getString(R.string.error_saving_contacts);
             Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
             Snackbar.make(view, errorMsg, Snackbar.LENGTH_LONG).show();
             speakErrorMessages(errorMsg);
@@ -650,19 +718,19 @@ public class RegisterNumberActivity extends AppCompatActivity {
     private boolean validateEmergencyData(String name, String number1, String number2, String incident) {
         // Check for duplicate emergency numbers
         if (!TextUtils.isEmpty(number1) && !TextUtils.isEmpty(number2) && number1.equals(number2)) {
-            Toast.makeText(this, "Emergency numbers cannot be the same", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.emergency_numbers_same), Toast.LENGTH_LONG).show();
             return false;
         }
         
         // Check incident type length
         if (incident.length() > MAX_INCIDENT_LENGTH) {
-            Toast.makeText(this, "Incident description too long", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.incident_description_too_long), Toast.LENGTH_LONG).show();
             return false;
         }
         
         // Check for at least one emergency number
         if (TextUtils.isEmpty(number1) && TextUtils.isEmpty(number2)) {
-            Toast.makeText(this, "At least one emergency number is required", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.at_least_one_emergency_required), Toast.LENGTH_LONG).show();
             return false;
         }
         
@@ -694,13 +762,31 @@ public class RegisterNumberActivity extends AppCompatActivity {
             @Override
             public void onInit(int status) {
                 if (status == TextToSpeech.SUCCESS) {
-                    Locale ukLocale = Locale.UK;
-                    int result = tts.setLanguage(ukLocale);
+                    ttsReady = true;
+                    java.util.Locale selected = TTSLanguageManager.getSelectedLocale(RegisterNumberActivity.this);
+                    int result = TTSLanguageManager.setTtsLanguage(tts, selected);
                     if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        Toast.makeText(RegisterNumberActivity.this, "UK English voice not available. Please install UK English TTS in your device settings.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterNumberActivity.this, getString(R.string.selected_tts_voice_missing), Toast.LENGTH_LONG).show();
+                        try {
+                            startActivity(new android.content.Intent(android.speech.tts.TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA));
+                        } catch (Exception ignored) {}
                     }
-                    tts.setSpeechRate(1.0f);
-                    tts.setPitch(1.0f);
+                    if ("sw".equals(selected.getLanguage())) {
+                        tts.setSpeechRate(0.90f);
+                        tts.setPitch(1.0f);
+                    } else {
+                        tts.setSpeechRate(1.0f);
+                        tts.setPitch(1.0f);
+                    }
+                    setBestVoiceForLocale(selected);
+                    // If user preference is auto-read or a start was requested earlier, start now
+                    if (TTSLanguageManager.isAutoReadEnabled(RegisterNumberActivity.this) || pendingAutoRead) {
+                        pendingAutoRead = false;
+                        // Small delay to ensure UI is ready
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            startTextToSpeech();
+                        }, 300);
+                    }
                 }
             }
         });
@@ -728,7 +814,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
         if (nameEdit != null) {
             nameEdit.setOnFocusChangeListener((v, hasFocus) -> {
                 if (hasFocus) {
-                    speakFieldFocus("Name field", "Enter your full name as it appears on official documents");
+                    speakFieldFocus(getString(R.string.name_field), getString(R.string.name_field_hint));
                 }
             });
         }
@@ -736,7 +822,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
         if (numberEdit != null) {
             numberEdit.setOnFocusChangeListener((v, hasFocus) -> {
                 if (hasFocus) {
-                    speakFieldFocus("Primary emergency contact field", "Enter the phone number of your most trusted emergency contact");
+                    speakFieldFocus(getString(R.string.primary_emergency_contact_field), getString(R.string.primary_emergency_contact_hint));
                 }
             });
         }
@@ -744,7 +830,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
         if (number2Edit != null) {
             number2Edit.setOnFocusChangeListener((v, hasFocus) -> {
                 if (hasFocus) {
-                    speakFieldFocus("Secondary emergency contact field", "Enter an alternative emergency contact number as backup");
+                    speakFieldFocus(getString(R.string.secondary_emergency_contact_field), getString(R.string.secondary_emergency_contact_hint));
                 }
             });
         }
@@ -752,7 +838,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
         if (manualIncidentEditText != null) {
             manualIncidentEditText.setOnFocusChangeListener((v, hasFocus) -> {
                 if (hasFocus) {
-                    speakFieldFocus("Custom incident description field", "Describe your specific emergency type if not listed above");
+                    speakFieldFocus(getString(R.string.custom_incident_description_field), getString(R.string.custom_incident_description_hint));
                 }
             });
         }
@@ -760,7 +846,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
         if (incidentSpinner != null) {
             incidentSpinner.setOnFocusChangeListener((v, hasFocus) -> {
                 if (hasFocus) {
-                    speakFieldFocus("Incident type dropdown", "Select the type of emergency you want to prepare for");
+                    speakFieldFocus(getString(R.string.incident_type_dropdown), getString(R.string.incident_type_dropdown_hint));
                 }
             });
         }
@@ -781,106 +867,161 @@ public class RegisterNumberActivity extends AppCompatActivity {
         );
         accessibilityDialog.getWindow().setGravity(android.view.Gravity.CENTER);
 
-        MaterialButton startTTSButton = accessibilityDialog.findViewById(R.id.btnStartTTS);
-        MaterialButton stopAudioButton = accessibilityDialog.findViewById(R.id.btnStopAudio);
-        MaterialButton highContrastButton = accessibilityDialog.findViewById(R.id.btnHighContrast);
-
-        MaterialButton largeTextButton = accessibilityDialog.findViewById(R.id.btnIncreaseTextSize);
-        MaterialButton readingGuideButton = accessibilityDialog.findViewById(R.id.btnReadingGuide);
-        MaterialButton speakAllButton = accessibilityDialog.findViewById(R.id.btnReadPage);
+        View rowReadPage = accessibilityDialog.findViewById(R.id.rowReadPage);
+        Switch switchAutoRead = accessibilityDialog.findViewById(R.id.switchAutoRead);
+        Switch switchCursorReading = accessibilityDialog.findViewById(R.id.switchCursorReading);
+        View btnTextLarger = accessibilityDialog.findViewById(R.id.btnTextLarger);
+        View btnTextSmaller = accessibilityDialog.findViewById(R.id.btnTextSmaller);
         MaterialButton resetButton = accessibilityDialog.findViewById(R.id.btnResetAccessibility);
-        MaterialButton cancelButton = accessibilityDialog.findViewById(R.id.btnCancelAccessibility);
+        Button cancelButton = accessibilityDialog.findViewById(R.id.btnCancelAccessibility);
+        View btnStopReading = accessibilityDialog.findViewById(R.id.btnStopReading);
+        TextView textFooterStatus = accessibilityDialog.findViewById(R.id.textFooterStatus);
+        TextView textContrastValue = accessibilityDialog.findViewById(R.id.textContrastValue);
+        TextView textColorsValue = accessibilityDialog.findViewById(R.id.textColorsValue);
+        View rowLanguage = accessibilityDialog.findViewById(R.id.rowLanguage);
+        TextView textLanguageValue = accessibilityDialog.findViewById(R.id.textLanguageValue);
 
-        startTTSButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startTextToSpeech();
-                Toast.makeText(RegisterNumberActivity.this, "Text-to-Speech started", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        stopAudioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopAudio();
-                Toast.makeText(RegisterNumberActivity.this, "Audio stopped", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        highContrastButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleHighContrast();
-                Toast.makeText(RegisterNumberActivity.this, "High Contrast Toggled", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-
-        largeTextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleTextSize();
-                Toast.makeText(RegisterNumberActivity.this, "Text Size Toggled", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        readingGuideButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleReadingGuide();
-                Toast.makeText(RegisterNumberActivity.this, "Reading Guide Toggled", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        speakAllButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if (rowReadPage != null) {
+            rowReadPage.setOnClickListener(v -> {
                 speakAllFields();
-                Toast.makeText(RegisterNumberActivity.this, "Reading Page Content", Toast.LENGTH_SHORT).show();
-            }
-        });
+                Toast.makeText(RegisterNumberActivity.this, getString(R.string.reading_page_content), Toast.LENGTH_SHORT).show();
+            });
+        }
 
-        resetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if (switchAutoRead != null) {
+            switchAutoRead.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    startTextToSpeech();
+                    Toast.makeText(RegisterNumberActivity.this, getString(R.string.auto_read_on), Toast.LENGTH_SHORT).show();
+                } else {
+                    stopAudio();
+                    Toast.makeText(RegisterNumberActivity.this, getString(R.string.auto_read_off), Toast.LENGTH_SHORT).show();
+                }
+                TTSLanguageManager.setAutoReadEnabled(RegisterNumberActivity.this, isChecked);
+                updateFooter(textFooterStatus, switchAutoRead.isChecked());
+            });
+        }
+
+        if (switchCursorReading != null) {
+            switchCursorReading.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                toggleReadingGuide();
+                Toast.makeText(RegisterNumberActivity.this, (isChecked ? getString(R.string.cursor_reading_on) : getString(R.string.cursor_reading_off)), Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        // No image description switch in layout
+
+        if (btnTextLarger != null) {
+            btnTextLarger.setOnClickListener(v -> {
+                toggleTextSize();
+                Toast.makeText(RegisterNumberActivity.this, getString(R.string.text_larger), Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        if (btnTextSmaller != null) {
+            btnTextSmaller.setOnClickListener(v -> {
+                toggleTextSize();
+                Toast.makeText(RegisterNumberActivity.this, getString(R.string.text_smaller), Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        if (btnStopReading != null) {
+            btnStopReading.setOnClickListener(v -> {
+                stopAudio();
+                if (tts != null) {
+                    tts.stop();
+                }
+                Toast.makeText(RegisterNumberActivity.this, isSw() ? "Kusoma kumesitishwa" : "Reading stopped", Toast.LENGTH_SHORT).show();
+                updateFooter(textFooterStatus, false);
+            });
+        }
+
+        if (resetButton != null) {
+            resetButton.setOnClickListener(v -> {
                 resetAccessibilitySettings();
-                Toast.makeText(RegisterNumberActivity.this, "All settings reset", Toast.LENGTH_SHORT).show();
-            }
-        });
+                if (switchAutoRead != null) switchAutoRead.setChecked(false);
+                if (switchCursorReading != null) switchCursorReading.setChecked(false);
+                if (textContrastValue != null) textContrastValue.setText(getString(R.string.normal));
+                if (textColorsValue != null) textColorsValue.setText(getString(R.string.normal));
+                updateFooter(textFooterStatus, false);
+                Toast.makeText(RegisterNumberActivity.this, getString(R.string.all_settings_reset), Toast.LENGTH_SHORT).show();
+            });
+        }
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if (cancelButton != null) {
+            cancelButton.setOnClickListener(v -> {
                 accessibilityDialog.dismiss();
                 if (tts != null) {
-                    tts.speak("Accessibility options closed", TextToSpeech.QUEUE_FLUSH, null, null);
+                    tts.speak(getString(R.string.accessibility_options_closed), TextToSpeech.QUEUE_FLUSH, null, null);
                 }
-            }
-        });
+            });
+        }
 
+        // Initialize switch states and footer
+        if (textLanguageValue != null) textLanguageValue.setText(TTSLanguageManager.getSelectedLanguageName(this));
+        if (rowLanguage != null) {
+            rowLanguage.setOnClickListener(v -> {
+                TTSLanguageManager.toggleLanguage(RegisterNumberActivity.this);
+                if (textLanguageValue != null) textLanguageValue.setText(TTSLanguageManager.getSelectedLanguageName(RegisterNumberActivity.this));
+                if (tts != null) {
+                    java.util.Locale selected = TTSLanguageManager.getSelectedLocale(RegisterNumberActivity.this);
+                    int result = TTSLanguageManager.setTtsLanguage(tts, selected);
+                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        try { startActivity(new android.content.Intent(android.speech.tts.TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA)); } catch (Exception ignored) {}
+                    }
+                    if ("sw".equals(selected.getLanguage())) {
+                        tts.setSpeechRate(0.90f);
+                    } else {
+                        tts.setSpeechRate(1.0f);
+                    }
+                    setBestVoiceForLocale(selected);
+                }
+                // Update locale and re-read if auto-read is enabled
+                updateLocale();
+                if (switchAutoRead != null && switchAutoRead.isChecked()) {
+                    // Stop current speech and restart in new language
+                    if (tts != null) {
+                        tts.stop();
+                    }
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        startTextToSpeech();
+                    }, 200);
+                }
+            });
+        }
+        boolean autoPref = TTSLanguageManager.isAutoReadEnabled(this);
+        if (switchAutoRead != null) switchAutoRead.setChecked(autoPref);
+        updateFooter(textFooterStatus, autoPref);
         accessibilityDialog.show();
+    }
+
+    private void updateFooter(TextView footer, boolean autoOn) {
+        if (footer != null) {
+            footer.setText(getString(R.string.font_status, (autoOn ? getString(R.string.auto_on) : getString(R.string.auto_off))));
+        }
+    }
+
+    private boolean isSw() {
+        java.util.Locale loc = TTSLanguageManager.getSelectedLocale(this);
+        return loc != null && "sw".equalsIgnoreCase(loc.getLanguage());
     }
 
     /**
      * Starts continuous Text-to-Speech narration
      */
     private void startTextToSpeech() {
+        if (!ttsReady) {
+            // Defer until TTS engine is ready
+            pendingAutoRead = true;
+            return;
+        }
         if (isAudioActive) {
             stopAudio();
         }
         
         isAudioActive = true;
-        audioRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (isAudioActive && tts != null) {
-                    speakAllPageContent();
-                    audioHandler.postDelayed(this, 15000); // Repeat every 15 seconds
-                }
-            }
-        };
-        audioHandler.post(audioRunnable);
+        // Speak once in segmented queue to avoid truncation
+        speakAllPageContent();
     }
 
     /**
@@ -896,86 +1037,151 @@ public class RegisterNumberActivity extends AppCompatActivity {
         }
     }
 
+    private void setBestVoiceForLocale(java.util.Locale locale) {
+        try {
+            if (tts == null) return;
+            java.util.Set<Voice> voices = tts.getVoices();
+            if (voices == null) return;
+            Voice best = null;
+            for (Voice v : voices) {
+                java.util.Locale vLoc = v.getLocale();
+                if (vLoc != null && vLoc.getLanguage().equalsIgnoreCase(locale.getLanguage())) {
+                    // Prefer exact country match (en-GB, sw-KE)
+                    boolean countryMatch = vLoc.getCountry() != null && vLoc.getCountry().equalsIgnoreCase(locale.getCountry());
+                    if (best == null || countryMatch) {
+                        best = v;
+                        if (countryMatch) break;
+                    }
+                }
+            }
+            if (best != null) {
+                tts.setVoice(best);
+            }
+        } catch (Exception ignored) {}
+    }
+
     /**
      * Speaks all page content for accessibility
      */
     private void speakAllPageContent() {
         if (tts == null) return;
-        
-        StringBuilder content = new StringBuilder();
-        content.append("BilaWoga Emergency Contact Setup Page. ");
-        content.append("This page allows you to configure your emergency contacts and incident preferences. ");
-        content.append("All information entered here will be used only for emergency situations. ");
-        
-        content.append("Form Instructions: ");
-        content.append("Please fill in all required fields marked with an asterisk. ");
-        content.append("Your information will be stored securely and encrypted. ");
-        
-        // Read all visible text content with detailed instructions
-        if (nameEdit != null && nameEdit.getText() != null) {
-            String nameText = nameEdit.getText().toString();
-            if (!nameText.isEmpty()) {
-                content.append("Name field contains: ").append(nameText).append(". ");
-            } else {
-                content.append("Name field is empty. Please enter your full name as it appears on official documents. ");
-                content.append("This name will be used to identify you in emergency situations. ");
+        java.util.List<String> parts = new java.util.ArrayList<>();
+        if (isSw()) {
+            parts.add("Ukurasa wa Kuandaa Mawasiliano ya Dharura wa BilaWoga.");
+            parts.add("Hapa utaweka majina na namba zako za dharura na kuchagua aina ya tukio.");
+            parts.add("Taarifa zako zitatumika tu wakati wa dharura.");
+
+            parts.add("Maelekezo ya Fomu.");
+            parts.add("Tafadhali jaza sehemu zote muhimu.");
+            parts.add("Taarifa zako zitahifadhiwa kwa usalama.");
+
+            if (nameEdit != null && nameEdit.getText() != null) {
+                String nameText = nameEdit.getText().toString();
+                if (!nameText.isEmpty()) {
+                    parts.add("Sehemu ya jina ina: " + maskSensitiveData(nameText) + ".");
+                } else {
+                    parts.add("Sehemu ya jina iko wazi. Tafadhali andika jina lako kamili.");
+                }
             }
-        }
-        
-        if (numberEdit != null && numberEdit.getText() != null) {
-            String numberText = numberEdit.getText().toString();
-            if (!numberText.isEmpty()) {
-                content.append("Primary emergency contact field contains: ").append(numberText).append(". ");
-            } else {
-                content.append("Primary emergency contact field is empty. ");
-                content.append("Please enter the phone number of your most trusted emergency contact. ");
-                content.append("This should be someone who can respond quickly in an emergency. ");
-                content.append("Enter the number in international format, for example: plus two five six seven seven zero one two three four five six. ");
+
+            if (numberEdit != null && numberEdit.getText() != null) {
+                String numberText = numberEdit.getText().toString();
+                if (!numberText.isEmpty()) {
+                    parts.add("Namba ya dharura ya kwanza: " + maskPhoneNumber(numberText) + ".");
+                } else {
+                    parts.add("Sehemu ya namba ya dharura ya kwanza iko wazi.");
+                }
             }
-        }
-        
-        if (number2Edit != null && number2Edit.getText() != null) {
-            String number2Text = number2Edit.getText().toString();
-            if (!number2Text.isEmpty()) {
-                content.append("Secondary emergency contact field contains: ").append(number2Text).append(". ");
-            } else {
-                content.append("Secondary emergency contact field is empty. ");
-                content.append("Please enter an alternative emergency contact number as backup. ");
-                content.append("This is optional but recommended for better emergency response. ");
+
+            if (number2Edit != null && number2Edit.getText() != null) {
+                String number2Text = number2Edit.getText().toString();
+                if (!number2Text.isEmpty()) {
+                    parts.add("Namba ya dharura ya pili: " + maskPhoneNumber(number2Text) + ".");
+                } else {
+                    parts.add("Sehemu ya namba ya dharura ya pili iko wazi. Si lazima, lakini inashauriwa.");
+                }
             }
-        }
-        
-        if (incidentSpinner != null) {
-            content.append("Incident type dropdown is available. ");
-            content.append("Select the type of emergency you want to prepare for. ");
-            content.append("Options include: Abduction, Sexual Assault, Domestic Violence, Medical Emergency, or Other. ");
-            content.append("If you select Other, you can provide additional details in the text field below. ");
-        }
-        
-        if (manualIncidentEditText != null && manualIncidentEditText.getText() != null) {
-            String incidentText = manualIncidentEditText.getText().toString();
-            if (!incidentText.isEmpty()) {
-                content.append("Custom incident description field contains: ").append(incidentText).append(". ");
-            } else {
-                content.append("Custom incident description field is empty. ");
-                content.append("If you selected Other in the incident type dropdown, please describe your specific emergency type here. ");
-                content.append("This helps emergency responders understand your situation better. ");
+
+            if (incidentSpinner != null) { parts.add("Chagua aina ya tukio la dharura kwenye menyu kushuka."); }
+
+            if (manualIncidentEditText != null && manualIncidentEditText.getText() != null) {
+                String incidentText = manualIncidentEditText.getText().toString();
+                if (!incidentText.isEmpty()) {
+                    parts.add("Maelezo ya tukio maalum: " + incidentText + ".");
+                } else {
+                    parts.add("Unaweza kuandika maelezo ya tukio kama umechagua Nyingine.");
+                }
             }
+
+            parts.add("Vitufe vya Uendeshaji.");
+            parts.add("Hifadhi Mawasiliano ya Dharura: kuhifadhi taarifa zako salama.");
+            parts.add("Ufikiaji: kufungua chaguo za ufikivu.");
+            parts.add("Rudi: kurudi bila kuhifadhi.");
+            parts.add("Asante kwa kutumia BilaWoga. Usalama wako ni kipaumbele chetu.");
+        } else {
+            parts.add("BilaWoga Emergency Contact Setup Page.");
+            parts.add("This is where you will share your contacts and select the case type.");
+            parts.add("Information is used only for emergencies.");
+
+            parts.add("Form Instructions.");
+            parts.add("Fill all required fields.");
+            parts.add("Your data is stored securely.");
+
+            if (nameEdit != null && nameEdit.getText() != null) {
+                String nameText = nameEdit.getText().toString();
+                if (!nameText.isEmpty()) {
+                    parts.add("Name field contains: " + maskSensitiveData(nameText) + ".");
+                } else {
+                    parts.add("Name field is empty. Please enter your full name.");
+                }
+            }
+
+            if (numberEdit != null && numberEdit.getText() != null) {
+                String numberText = numberEdit.getText().toString();
+                if (!numberText.isEmpty()) {
+                    parts.add("Primary emergency contact: " + maskPhoneNumber(numberText) + ".");
+                } else {
+                    parts.add("Primary emergency contact field is empty.");
+                }
+            }
+
+            if (number2Edit != null && number2Edit.getText() != null) {
+                String number2Text = number2Edit.getText().toString();
+                if (!number2Text.isEmpty()) {
+                    parts.add("Secondary emergency contact: " + maskPhoneNumber(number2Text) + ".");
+                } else {
+                    parts.add("Secondary contact is optional but recommended.");
+                }
+            }
+
+            if (incidentSpinner != null) { parts.add("Select your incident type from the dropdown."); }
+
+            if (manualIncidentEditText != null && manualIncidentEditText.getText() != null) {
+                String incidentText = manualIncidentEditText.getText().toString();
+                if (!incidentText.isEmpty()) {
+                    parts.add("Custom incident description: " + incidentText + ".");
+                } else {
+                    parts.add("Describe your specific emergency if you chose Other.");
+                }
+            }
+
+            parts.add("Actions: Save contacts. Accessibility options. Back to previous screen.");
+            parts.add("Thank you for using BilaWoga. Your safety matters.");
         }
-        
-        content.append("Navigation and Actions: ");
-        content.append("Save Emergency Contacts button: Saves all your information securely. ");
-        content.append("Accessibility button: Opens additional accessibility options. ");
-        content.append("Back button: Returns to the previous screen without saving. ");
-        
-        content.append("Security Information: ");
-        content.append("All your data is encrypted and stored securely on your device. ");
-        content.append("Emergency contacts are only contacted when you activate an emergency alert. ");
-        content.append("Your privacy is protected and information is never shared without your consent. ");
-        
-        content.append("Thank you for using BilaWoga Safety App. Your safety is our priority.");
-        
-        tts.speak(content.toString(), TextToSpeech.QUEUE_FLUSH, null, "page_content");
+        speakQueued(parts);
+    }
+
+    private void speakQueued(java.util.List<String> parts) {
+        if (tts == null || parts == null || parts.isEmpty()) return;
+        boolean first = true;
+        for (String p : parts) {
+            if (p == null || p.trim().isEmpty()) continue;
+            int queueMode = first ? TextToSpeech.QUEUE_FLUSH : TextToSpeech.QUEUE_ADD;
+            tts.speak(p, queueMode, null, java.util.UUID.randomUUID().toString());
+            // add a short pause between segments
+            tts.playSilentUtterance(150, TextToSpeech.QUEUE_ADD, java.util.UUID.randomUUID().toString());
+            first = false;
+        }
     }
     
     /**
@@ -983,13 +1189,18 @@ public class RegisterNumberActivity extends AppCompatActivity {
      */
     private void speakPopupContent(String popupTitle, String popupMessage) {
         if (tts == null) return;
-        
         StringBuilder popupContent = new StringBuilder();
-        popupContent.append("Popup Alert. ");
-        popupContent.append("Title: ").append(popupTitle).append(". ");
-        popupContent.append("Message: ").append(popupMessage).append(". ");
-        popupContent.append("Please read this information carefully. ");
-        
+        if (isSw()) {
+            popupContent.append("Arifa ya dirisha. ");
+            popupContent.append("Kichwa: ").append(popupTitle).append(". ");
+            popupContent.append("Ujumbe: ").append(popupMessage).append(". ");
+            popupContent.append("Tafadhali soma kwa makini. ");
+        } else {
+            popupContent.append("Popup Alert. ");
+            popupContent.append("Title: ").append(popupTitle).append(". ");
+            popupContent.append("Message: ").append(popupMessage).append(". ");
+            popupContent.append("Please read this carefully. ");
+        }
         tts.speak(popupContent.toString(), TextToSpeech.QUEUE_FLUSH, null, "popup_content");
     }
     
@@ -998,12 +1209,16 @@ public class RegisterNumberActivity extends AppCompatActivity {
      */
     private void speakErrorMessages(String errorMessage) {
         if (tts == null) return;
-        
         StringBuilder errorContent = new StringBuilder();
-        errorContent.append("Error Alert. ");
-        errorContent.append("Error message: ").append(errorMessage).append(". ");
-        errorContent.append("Please try again or contact support if the problem persists. ");
-        
+        if (isSw()) {
+            errorContent.append("Arifa ya kosa. ");
+            errorContent.append("Ujumbe wa kosa: ").append(errorMessage).append(". ");
+            errorContent.append("Tafadhali jaribu tena. ");
+        } else {
+            errorContent.append("Error Alert. ");
+            errorContent.append("Error message: ").append(errorMessage).append(". ");
+            errorContent.append("Please try again. ");
+        }
         tts.speak(errorContent.toString(), TextToSpeech.QUEUE_FLUSH, null, "error_message");
     }
     
@@ -1012,12 +1227,16 @@ public class RegisterNumberActivity extends AppCompatActivity {
      */
     private void speakSuccessMessages(String successMessage) {
         if (tts == null) return;
-        
         StringBuilder successContent = new StringBuilder();
-        successContent.append("Success Alert. ");
-        successContent.append("Success message: ").append(successMessage).append(". ");
-        successContent.append("Your action has been completed successfully. ");
-        
+        if (isSw()) {
+            successContent.append("Ujumbe wa mafanikio. ");
+            successContent.append("Maelezo: ").append(successMessage).append(". ");
+            successContent.append("Hatua yako imekamilika. ");
+        } else {
+            successContent.append("Success. ");
+            successContent.append("Message: ").append(successMessage).append(". ");
+            successContent.append("Your action completed. ");
+        }
         tts.speak(successContent.toString(), TextToSpeech.QUEUE_FLUSH, null, "success_message");
     }
     
@@ -1026,12 +1245,15 @@ public class RegisterNumberActivity extends AppCompatActivity {
      */
     private void speakFieldFocus(String fieldName, String fieldHint) {
         if (tts == null) return;
-        
         StringBuilder focusContent = new StringBuilder();
-        focusContent.append("Focused on: ").append(fieldName).append(". ");
-        focusContent.append("Hint: ").append(fieldHint).append(". ");
-        
-        tts.speak(focusContent.toString(), TextToSpeech.QUEUE_FLUSH, null, "field_focus");
+        if (isSw()) {
+            focusContent.append("Umechagua: ").append(fieldName).append(". ");
+            focusContent.append("Ushauri: ").append(fieldHint).append(". ");
+        } else {
+            focusContent.append("Focused on: ").append(fieldName).append(". ");
+            focusContent.append("Hint: ").append(fieldHint).append(". ");
+        }
+        tts.speak(focusContent.toString(), TextToSpeech.QUEUE_ADD, null, "field_focus");
     }
 
 
@@ -1141,7 +1363,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
 
     private void speakAllFields() {
         if (tts == null) {
-            Toast.makeText(this, "Text-to-Speech not available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.text_to_speech_not_available), Toast.LENGTH_SHORT).show();
             return;
         }
         
@@ -1151,23 +1373,23 @@ public class RegisterNumberActivity extends AppCompatActivity {
         if (nameEdit != null) {
             String name = nameEdit.getText().toString();
             if (!TextUtils.isEmpty(name)) {
-                textToSpeak.append("Your name is ").append(maskSensitiveData(name)).append(". ");
+                textToSpeak.append(getString(R.string.your_name_is, maskSensitiveData(name))).append(" ");
             }
         }
         
         if (numberEdit != null) {
             String number = numberEdit.getText().toString();
             if (!TextUtils.isEmpty(number)) {
-                textToSpeak.append("Emergency number one is ").append(maskPhoneNumber(number)).append(". ");
+                textToSpeak.append(getString(R.string.emergency_number_one_is, maskPhoneNumber(number))).append(" ");
             }
         }
         
         if (number2Edit != null && !TextUtils.isEmpty(number2Edit.getText().toString())) {
             String number2 = number2Edit.getText().toString();
-            textToSpeak.append("Emergency number two is ").append(maskPhoneNumber(number2)).append(". ");
+            textToSpeak.append(getString(R.string.emergency_number_two_is, maskPhoneNumber(number2))).append(" ");
         }
         
-        textToSpeak.append("Incident type is ").append(getSelectedIncident()).append(". ");
+        textToSpeak.append(getString(R.string.incident_type_is, getSelectedIncident())).append(" ");
         tts.speak(textToSpeak.toString(), TextToSpeech.QUEUE_FLUSH, null, null);
     }
     
@@ -1207,7 +1429,7 @@ public class RegisterNumberActivity extends AppCompatActivity {
             startActivity(intent);
         } catch (Exception e) {
             Log.e(TAG, "Error showing policy viewer", e);
-            Toast.makeText(this, "Error opening policy. Please try again.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_opening_policy), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1268,14 +1490,14 @@ public class RegisterNumberActivity extends AppCompatActivity {
             // Check if number is reachable (basic validation)
             if (isNumberReachable(number)) {
                 saveContact(number, contactName);
-                Toast.makeText(this, "Contact saved successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.contact_saved_successfully), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Warning: Number may not be reachable. Please verify.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.number_may_not_be_reachable), Toast.LENGTH_LONG).show();
                 // Still save but with warning
                 saveContact(number, contactName);
             }
         } else {
-            Toast.makeText(this, "Invalid phone number format!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.invalid_phone_number_format), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -1346,6 +1568,6 @@ public class RegisterNumberActivity extends AppCompatActivity {
 
     public void toggleEmergencyNumbers(View view) {
         // TODO: Implement show/hide logic for emergency numbers
-        Toast.makeText(this, "Toggle emergency numbers clicked", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.toggle_emergency_numbers_clicked), Toast.LENGTH_SHORT).show();
     }
 }

@@ -4,7 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="24dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="8dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="8dp">
 
@@ -12,195 +15,235 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:paddingBottom="0dp">
 
-        <!-- App Logo -->
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_launcher_foreground"
-            android:contentDescription="BilaWoga App Logo"
-            android:layout_marginBottom="16dp"/>
-
-        <!-- Main Title -->
-        <TextView
+        <!-- Scrollable Content Area -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Welcome to BilaWoga"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="8dp"/>
-
-        <!-- Subtitle -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Your Personal Emergency Protection System"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="20dp"/>
-
-        <!-- App Description -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="BilaWoga uses advanced AI to detect emergencies and automatically send help when you need it most. Your safety is our top priority."
-            android:textColor="@color/gray_700"
-            android:textSize="16sp"
-            android:lineSpacingExtra="4dp"
-            android:gravity="center"
-            android:layout_marginBottom="20dp"/>
-
-        <!-- Feature Highlights Card -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="#F5F5F5">
+            android:fillViewport="false"
+            android:scrollbars="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="24dp">
 
-                <TextView
+                <!-- Top-right TTS toggle -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Key Features:"
+                    android:orientation="horizontal"
+                    android:gravity="end|center_vertical"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/ttsLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TTS"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:layout_marginEnd="8dp"/>
+
+                    <Switch
+                        android:id="@+id/switchAutoReadLaunch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <!-- App Logo -->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_launcher_foreground"
+                    android:contentDescription="BilaWoga App Logo"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Main Title -->
+                <TextView
+                    android:id="@+id/welcomeTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Welcome to BilaWoga"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
-                    android:layout_marginBottom="12dp"/>
+                    android:gravity="center"
+                    android:layout_marginBottom="8dp"/>
 
+                <!-- Subtitle -->
                 <TextView
+                    android:id="@+id/subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="🛡️ 24/7 Protection\n🤖 AI-Powered Detection\n📱 Silent Emergency Alerts\n🌍 Works Worldwide"
+                    android:text="Your Personal Emergency Protection System"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_marginBottom="20dp"/>
+
+                <!-- Language selector row -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    app:boxBackgroundMode="outline"
+                    app:endIconMode="dropdown_menu"
+                    app:boxStrokeColor="@color/black"
+                    app:hintTextColor="@color/black">
+
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/languageDropdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/language"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:popupBackground="@android:color/white"
+                        android:dropDownVerticalOffset="8dp"
+                        android:dropDownHeight="wrap_content"
+                        android:inputType="none"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- App Description -->
+                <TextView
+                    android:id="@+id/appDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="BilaWoga uses advanced AI to detect emergencies and automatically send help when you need it most. Your safety is our top priority."
                     android:textColor="@color/gray_700"
                     android:textSize="14sp"
                     android:lineSpacingExtra="4dp"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Feature Highlights Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#F5F5F5">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/keyFeaturesTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Key Features:"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="12dp"/>
+
+                        <TextView
+                            android:id="@+id/keyFeaturesList"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="24/7 Protection\nAI-Powered Detection\nSilent Emergency Alerts"
+                            android:textColor="@color/gray_700"
+                            android:textSize="13sp"
+                            android:lineSpacingExtra="4dp"
+                            android:gravity="center"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Clear Instructions -->
+                <TextView
+                    android:id="@+id/setupProcessTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Setup Process:"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/setupSteps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="1. Review Privacy Policy\n2. Read Terms of Use\n3. Accept and confirm\n4. Set up emergency contacts"
+                    android:textColor="@color/gray_700"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="2dp"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Restore from Cloud (Visible only when backup exists) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRestoreNow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Restore from Cloud"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    app:cornerRadius="10dp"
+                    app:backgroundTint="@color/white"
+                    app:strokeColor="@color/colorPrimary"
+                    app:strokeWidth="1dp"
+                    android:visibility="gone"
+                    android:layout_marginBottom="16dp"/>
+
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </androidx.core.widget.NestedScrollView>
 
-        <!-- Clear Instructions -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="📋 Setup Process:"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="1. Review Privacy Policy\n2. Read Terms of Use\n3. Accept and confirm\n4. Set up emergency contacts"
-            android:textColor="@color/gray_700"
-            android:textSize="14sp"
-            android:lineSpacingExtra="2dp"
-            android:layout_marginBottom="24dp"/>
-
-        <!-- Primary Action Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnStartOnboarding"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="🚀 START SETUP NOW"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            app:cornerRadius="12dp"
-            app:backgroundTint="@color/colorPrimary"
-            android:layout_marginBottom="12dp"/>
-
-        <!-- Restore from Cloud (Visible only when backup exists) -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnRestoreNow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="☁ Restore from Cloud"
-            android:textAllCaps="false"
-            android:textColor="@color/colorPrimary"
-            android:textSize="14sp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            app:cornerRadius="10dp"
-            app:backgroundTint="@color/white"
-            app:strokeColor="@color/colorPrimary"
-            app:strokeWidth="1dp"
-            android:visibility="gone"
-            android:layout_marginBottom="16dp"/>
-
-        <!-- Secondary Actions -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Want to review policies first?"
-            android:textColor="@color/gray_700"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:layout_marginBottom="12dp"/>
-
+        <!-- Fixed Bottom Button Area -->
         <LinearLayout
+            android:id="@+id/buttonArea"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/privacyPolicyLink"
+            android:gravity="end|center_vertical"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="4dp"
+            android:background="@color/white"
+            android:layout_gravity="bottom">
+            
+            <TextView
+                android:id="@+id/btnStartOnboarding"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="📄 Privacy Policy"
+                android:minWidth="160dp"
+                android:minHeight="52dp"
+                android:text="@string/start"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
                 android:textAllCaps="false"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp"
-                android:padding="8dp"
-                app:cornerRadius="8dp"
-                app:backgroundTint="@color/white"
-                app:strokeColor="@color/colorPrimary"
-                app:strokeWidth="1dp"
-                android:layout_marginEnd="8dp"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/termsLink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="📋 Terms of Use"
-                android:textAllCaps="false"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp"
-                android:padding="8dp"
-                app:cornerRadius="8dp"
-                app:backgroundTint="@color/white"
-                app:strokeColor="@color/colorPrimary"
-                app:strokeWidth="1dp"
-                android:layout_marginStart="8dp"/>
+                android:gravity="center"
+                android:background="@drawable/button_start_blue"
+                android:elevation="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingStart="28dp"
+                android:paddingEnd="28dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:singleLine="true"
+                android:ellipsize="none"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:layout_gravity="end|center_vertical"/>
         </LinearLayout>
-
-        <!-- Help Text -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="💡 Tip: You can review policies anytime during setup"
-            android:textColor="@color/gray_700"
-            android:textSize="12sp"
-            android:gravity="center"
-            android:layout_marginTop="16dp"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
 

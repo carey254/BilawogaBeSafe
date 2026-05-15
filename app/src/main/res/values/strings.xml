@@ -1,8 +1,16 @@
 <resources>
     <string name="app_name">BilaWoga</string>
+    <string name="settings_title">Settings</string>
+    <string name="ai_monitoring_title">AI Monitoring</string>
+    <string name="ai_monitoring_summary">Enable AI-based emergency detection</string>
+    <string name="ai_monitoring_description">Uses AI to detect emergency situations based on movement patterns and audio analysis. Requires permission to access motion sensors and microphone.</string>
+    <string name="privacy_policy_link">Privacy Policy</string>
+    <string name="ai_monitoring_enabled">AI Monitoring enabled</string>
+    <string name="ai_monitoring_disabled">AI Monitoring disabled</string>
+    <string name="ai_monitoring_permission_required">AI monitoring permission is required for this feature</string>
+    <string name="ai_monitoring_permission_rationale">To detect emergencies, BilaWoga needs access to motion sensors and microphone. Your data stays on your device and is never shared without your permission.</string>
     <string name="enter_number_to_nsend_sms_nin_nemergency">Enter Number To\nSend SMS\nin\nEMERGENCY!</string>
     <string name="stop">Stop</string>
-    <string name="start">Start</string>
     <string name="sos_will_be_sent_to_n">SOS Will Be Sent To\n</string>
     <string name="send_emergency_alert">Send Emergency Alert</string>
     <string name="optional_enter_an_emergency_contact">Optional: Enter an emergency contact</string>
@@ -58,6 +66,48 @@
                     <li>Optional encrypted cloud backup is available to restore your data if you reinstall or log back in</li>
                 </ul>
             </div>
+        </div>
+
+        <div class="section">
+            <h2>4. Stealth Mode &amp; Silent Logging</h2>
+            <div class="important">
+                <strong>Your Safety is Our Priority:</strong>
+                <p>BilaWoga uses <strong>Stealth Mode</strong> to protect you during emergencies. When you send an SOS alert, there is <strong>no visible indication on your device</strong> - no messages, notifications, or confirmations appear. This ensures your safety by preventing detection.</p>
+            </div>
+            
+            <h3>4.1 How Stealth Mode Works</h3>
+            <ul>
+                <li><strong>Silent SOS Sending:</strong> When you activate SOS (manually, by shaking your device, or via AI detection), the message is sent directly to your trusted contacts without any visible indication on your phone</li>
+                <li><strong>No SMS App UI:</strong> Messages are sent directly to the carrier network, bypassing SMS apps entirely</li>
+                <li><strong>Automatic Audio Recording:</strong> When SOS is activated, the app automatically records 10 seconds of audio and sends it to your trusted contacts</li>
+                <li><strong>Automatic Retry:</strong> If sending fails, the app automatically retries up to 5 times to ensure delivery</li>
+            </ul>
+            
+            <h3>4.2 Silent Logging System</h3>
+            <p>All emergency events are logged securely and silently for your review when safe:</p>
+            <ul>
+                <li><strong>Encrypted Storage:</strong> All logs are stored in encrypted format on your device using AES-256-GCM encryption</li>
+                <li><strong>What is Logged:</strong> SOS attempts, success/failure status, audio recording status, retry attempts, and delivery confirmations</li>
+                <li><strong>Privacy Protected:</strong> Phone numbers in logs are masked (e.g., +2****56) for privacy</li>
+                <li><strong>No Network Sharing:</strong> Logs never leave your device - they are stored locally only</li>
+            </ul>
+            
+            <h3>4.3 How to View Your Emergency Logs</h3>
+            <p><strong>To check if your SOS was sent successfully:</strong></p>
+            <ol>
+                <li>Open the BilaWoga app</li>
+                <li>Tap the menu icon (⋮) in the top-right corner</li>
+                <li>Select <strong>"View Activity Log"</strong> or go to <strong>"Settings"</strong></li>
+                <li>View your emergency logs to see:
+                    <ul>
+                        <li><code>EMERGENCY_SOS_SUCCESS</code> - Message sent successfully</li>
+                        <li><code>EMERGENCY_AUDIO_SENT</code> - Audio recording sent</li>
+                        <li><code>EMERGENCY_SOS_RETRY_SUCCESS</code> - Retry successful</li>
+                        <li><code>EMERGENCY_SOS_FAILED</code> - Send failed (will retry automatically)</li>
+                    </ul>
+                </li>
+            </ol>
+            <p><strong>Important:</strong> Logs are only stored on your device. You can review them when safe to verify that your SOS was sent and received by your trusted contacts.</p>
         </div>
         ]]>
     </string>
@@ -146,6 +196,8 @@
             <li><strong>Encrypted Cloud Backup:</strong> Optional end-to-end encrypted backup enables auto-restore on this device only</li>
             <li><strong>Encrypted Data:</strong> All sensitive information is encrypted at rest and in backup</li>
             <li><strong>Emergency Only:</strong> Location data is only shared when you activate SOS</li>
+            <li><strong>Stealth Mode:</strong> SOS messages are sent silently with no visible indication on your device for maximum safety</li>
+            <li><strong>Silent Logging:</strong> All emergency events are logged securely for your review when safe (see Privacy Policy section 4.3 for how to view logs)</li>
         </ul>
         
         <h3>Your Rights:</h3>
@@ -202,6 +254,236 @@
         <p><strong>By accepting these terms, you acknowledge that you understand the app&apos;s purpose and will use it responsibly for genuine emergency situations only.</strong></p>
         ]]>
     </string>
+    
+    <!-- RegisterNumberActivity Strings -->
+    <string name="emergency_contact_setup">Emergency Contact Setup</string>
+    <string name="review_privacy_policy">Review Privacy Policy</string>
+    <string name="please_review_privacy_policy">Please review our Privacy Policy in the menu (⋮)</string>
+    <string name="configure_emergency_contacts">Configure your emergency contacts for immediate assistance</string>
+    <string name="security_information">Security Information</string>
+    <string name="security_info_description">All emergency contact information is encrypted and stored securely on your device. This data is accessible only to you and is protected with AES-256 encryption.</string>
+    <string name="enter_your_full_name">Enter your full name</string>
+    <string name="primary_emergency_contact">Primary emergency contact number</string>
+    <string name="secondary_emergency_contact">Secondary emergency contact number (optional)</string>
+    <string name="type_of_emergency">Type of Emergency</string>
+    <string name="describe_emergency_type">Describe the type of emergency (if not listed above)</string>
+    <string name="save_emergency_contacts">Save Emergency Contacts</string>
+    <string name="update_contacts_anytime">You can update these contacts at any time from the main screen</string>
+    
+    <!-- Incident Types -->
+    <string name="incident_no_emergency">No Current Emergency (Safe and Secure)</string>
+    <string name="incident_abduction">Abduction (taken forcefully or kidnapped)</string>
+    <string name="incident_sexual_assault">Sexual Assault / Harassment (unwanted touching or sexual comments)</string>
+    <string name="incident_domestic_violence">Domestic Violence (abuse from family or partner)</string>
+    <string name="incident_medical_emergency">Medical Emergency (serious health issue or injury)</string>
+    <string name="incident_other">Other (Specify Below)</string>
+    
+    <!-- Error Messages -->
+    <string name="emergency_number_required">Emergency number is required</string>
+    <string name="invalid_phone_length">Invalid phone number length (%1$d-%2$d digits)</string>
+    <string name="invalid_phone_format">Invalid phone number format</string>
+    <string name="invalid_characters_detected">Invalid characters detected in phone number</string>
+    <string name="use_personal_emergency_contact">Please use a personal emergency contact number</string>
+    <string name="please_enter_full_name">Please Enter Your Full Name</string>
+    <string name="name_min_length">Name must be at least %1$d characters</string>
+    <string name="name_max_length">Name must be less than %2$d characters</string>
+    <string name="name_invalid_characters">Name contains invalid characters</string>
+    <string name="name_only_letters">Name can only contain letters, spaces, hyphens, and apostrophes</string>
+    <string name="emergency_numbers_same">Emergency numbers cannot be the same</string>
+    <string name="incident_description_too_long">Incident description too long</string>
+    <string name="at_least_one_emergency_required">At least one emergency number is required</string>
+    <string name="invalid_phone_number_format">Invalid phone number format!</string>
+    
+    <!-- Success Messages -->
+    <string name="contact_saved_successfully">Contact saved successfully!</string>
+    <string name="emergency_contacts_saved_successfully">Emergency Contacts Saved Successfully!</string>
+    <string name="emergency_contacts_saved_securely">Emergency Contacts Saved Securely!</string>
+    <string name="number_may_not_be_reachable">Warning: Number may not be reachable. Please verify.</string>
+    
+    <!-- Other Messages -->
+    <string name="secure_storage_unavailable">Secure storage unavailable; running in test mode.</string>
+    <string name="please_check_name_and_numbers">Please check your name and emergency numbers</string>
+    <string name="save_button_clicked">Save button clicked</string>
+    <string name="error_form_fields_not_initialized">Error: Form fields not initialized</string>
+    <string name="please_wait_before_submitting">Please wait before submitting again</string>
+    <string name="please_select_emergency_type">Please select or describe an emergency type</string>
+    <string name="invalid_emergency_data">Invalid emergency data detected</string>
+    <string name="error_saving_contacts">Error saving emergency contacts!</string>
+    
+    <!-- MainActivity Strings -->
+    <string name="bilawoga_safety">BilaWoga Safety</string>
+    <string name="emergency_contacts">Emergency Contacts</string>
+    <string name="show_hide">Show/Hide</string>
+    
+    <!-- Onboarding Strings -->
+    <string name="welcome_to_bilawoga">Welcome to BilaWoga</string>
+    <string name="your_safety_priority">Your safety is our top priority</string>
+    <string name="onboarding_steps">1. Review Privacy Policy\n2. Read Terms of Use\n3. Accept and confirm\n4. Set up emergency contacts</string>
+    
+    <!-- Accessibility Strings -->
+    <string name="reading_stopped">Reading stopped</string>
+    <string name="all_settings_reset">All settings reset</string>
+    <string name="text_to_speech_not_available">Text-to-Speech not available</string>
+    
+    <!-- TTS Strings -->
+    <string name="selected_tts_voice_missing">Selected TTS voice missing. Please install voice data in settings.</string>
+    <string name="reading_page_content">Reading Page Content</string>
+    <string name="auto_read_on">Auto Read ON</string>
+    <string name="auto_read_off">Auto Read OFF</string>
+    <string name="cursor_reading_on">Cursor Reading ON</string>
+    <string name="cursor_reading_off">Cursor Reading OFF</string>
+    <string name="text_larger">Text Larger</string>
+    <string name="text_smaller">Text Smaller</string>
+    
+    <!-- Additional MainActivity Strings -->
+    <string name="all_permissions_granted">All permissions granted! Starting SOS service…</string>
+    <string name="some_permissions_denied">Some permissions denied. Please grant them in Settings.</string>
+    <string name="failed_to_send_sms">Failed to send SMS: %1$s</string>
+    <string name="test_mode_on">Test Mode is ON</string>
+    <string name="test_mode_enabled">Test Mode ENABLED</string>
+    <string name="test_mode_disabled">Test Mode DISABLED</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_of_use">Terms of Use</string>
+    <string name="activity_log">Activity Log</string>
+    <string name="panic_wipe_requested">Panic wipe requested</string>
+    <string name="log_out">Log out</string>
+    <string name="log_out_message">Do you want to keep your emergency contacts and settings on this device?</string>
+    <string name="erase_now">Erase now</string>
+    <string name="back_up_to_cloud_log_out">Back up to cloud &amp; log out</string>
+    <string name="cancel">Cancel</string>
+    <string name="data_erased_logged_out">Data erased and logged out</string>
+    <string name="secure_storage_not_available">Secure storage not available</string>
+    <string name="backup_complete_logging_out">Backup complete. Logging out…</string>
+    <string name="backup_failed">Backup failed: %1$s</string>
+    <string name="backup_failed_fid">Backup failed (FID): %1$s</string>
+    <string name="anonymous_sign_in_failed">Anonymous sign-in failed: %1$s</string>
+    <string name="unable_to_show">Unable to show %1$s</string>
+    <string name="logout">Logout</string>
+    <string name="logout_message">If you log out, your saved data (including emergency contacts) will be erased from this device. Do you want to continue?</string>
+    <string name="logout_button">Logout</string>
+    <string name="you_have_been_logged_out">You have been logged out. Local data erased.</string>
+    <string name="contact_1">Contact 1: %1$s</string>
+    <string name="contact_2">Contact 2: %1$s</string>
+    <string name="no_emergency_contacts_saved">No emergency contacts saved. Go to Change Number to add them.</string>
+    <string name="ai_monitoring_enabled_enhanced">AI Monitoring enabled for enhanced safety</string>
+    <string name="ai_monitoring_disabled_limited">AI Monitoring is disabled. Some safety features may be limited.</string>
+    <string name="kenya_emergency_hotlines">Kenya Emergency Hotlines:\n\n- Police: 999 / 112 / 911\n- Ambulance: 999 / 112 / 911\n- Fire Brigade: 999 / 112 / 911\n\nTip: Add personal emergency contacts in Settings.</string>
+    <string name="emergency_services_kenya">Emergency Services - Kenya</string>
+    <string name="close">Close</string>
+    <string name="no_number_available">No number available</string>
+    <string name="unable_to_open_dialer">Unable to open dialer</string>
+    <string name="confirm_sos">Confirm SOS</string>
+    <string name="sending_alert_in_seconds">Sending alert in %1$d seconds…</string>
+    <string name="send_now">Send now</string>
+    <string name="sos_canceled">SOS canceled</string>
+    <string name="user">User</string>
+    <string name="emergency">Emergency</string>
+    <string name="failed_to_send_sos">Failed to send SOS</string>
+    <string name="sms_sent_successfully">SMS sent successfully</string>
+    <string name="message_sent_successfully">Message sent successfully</string>
+    <string name="alert_sent_successfully">Alert sent successfully</string>
+    <string name="sms_delivered">SMS delivered</string>
+    <string name="generic_failure">Generic failure</string>
+    <string name="no_service">No service</string>
+    <string name="null_pdu">Null PDU</string>
+    <string name="radio_off">Radio off</string>
+    <string name="rate_limit_exceeded">Rate limit exceeded</string>
+    <string name="error_code">Error code %1$d</string>
+    <string name="sms_permission_required">SMS permission required</string>
+    
+    <!-- Additional RegisterNumberActivity Strings -->
+    <string name="accessibility_options_closed">Accessibility options closed</string>
+    <string name="font_status">Font: 100%% | Normal | Auto: %1$s</string>
+    <string name="auto_on">ON</string>
+    <string name="auto_off">OFF</string>
+    <string name="name_field">Name field</string>
+    <string name="name_field_hint">Enter your full name as it appears on official documents</string>
+    <string name="primary_emergency_contact_field">Primary emergency contact field</string>
+    <string name="primary_emergency_contact_hint">Enter the phone number of your most trusted emergency contact</string>
+    <string name="secondary_emergency_contact_field">Secondary emergency contact field</string>
+    <string name="secondary_emergency_contact_hint">Enter an alternative emergency contact number as backup</string>
+    <string name="custom_incident_description_field">Custom incident description field</string>
+    <string name="custom_incident_description_hint">Describe your specific emergency type if not listed above</string>
+    <string name="incident_type_dropdown">Incident type dropdown</string>
+    <string name="incident_type_dropdown_hint">Select the type of emergency you want to prepare for</string>
+    <string name="your_name_is">Your name is %1$s.</string>
+    <string name="emergency_number_one_is">Emergency number one is %1$s.</string>
+    <string name="emergency_number_two_is">Emergency number two is %1$s.</string>
+    <string name="incident_type_is">Incident type is %1$s.</string>
+    <string name="error_opening_policy">Error opening policy. Please try again.</string>
+    <string name="normal">Normal</string>
+    <string name="toggle_emergency_numbers_clicked">Toggle emergency numbers clicked</string>
+    
+    <!-- Onboarding Welcome Screen Strings -->
+    <string name="welcome_to_bilawoga_title">Welcome to BilaWoga</string>
+    <string name="your_personal_emergency_protection_system">Your Personal Emergency Protection System</string>
+    <string name="language">Language</string>
+    <string name="app_description">BilaWoga uses advanced AI to detect emergencies and automatically send help when you need it most. Your safety is our top priority.</string>
+    <string name="key_features">Key Features:</string>
+    <string name="key_features_list">24/7 Protection\nAI-Powered Detection\nSilent Emergency Alerts</string>
+    <string name="setup_process">Setup Process:</string>
+    <string name="setup_steps">1. Review Privacy Policy\n2. Read Terms of Use\n3. Accept and confirm\n4. Set up emergency contacts</string>
+    <string name="start">START</string>
+    <string name="restore_from_cloud">Restore from Cloud</string>
+    <string name="tts">TTS</string>
+    <string name="restore_complete">Restore complete</string>
+    <string name="no_backup_found">No backup found</string>
+    <string name="restore_failed">Restore failed</string>
+    
+    <!-- Policy Screen Strings -->
+    <string name="please_read_carefully">📖 Please read this information carefully</string>
+    <string name="step_1_of_3">Step 1 of 3</string>
+    <string name="step_2_of_3">Step 2 of 3</string>
+    <string name="step_3_of_3">Step 3 of 3</string>
+    <string name="back">Back</string>
+    <string name="i_accept_continue">I Accept &amp; Continue</string>
+    <string name="policy_content_loaded">Policy content loaded</string>
+    <string name="error_loading_policy_content">Error loading policy content</string>
+    <string name="policy_accepted">Policy accepted</string>
+    <string name="reading_policy_content">Reading Policy Content</string>
+    <string name="swahili">Swahili</string>
+    <string name="english">English</string>
+    
+    <!-- Final Step / Acceptance Screen -->
+    <string name="final_step">Final Step</string>
+    <string name="please_confirm_acceptance">Please confirm your acceptance</string>
+    <string name="to_complete_setup">To complete your setup, please confirm that you have read and agree to the following:</string>
+    <string name="i_have_read_privacy_policy">I have read and understand the Privacy Policy</string>
+    <string name="i_have_read_terms_of_use">I have read and agree to the Terms of Use</string>
+    <string name="i_understand_emergency_use">I understand this app is for emergency use only and I will use it responsibly</string>
+    <string name="important_notice">Important Notice</string>
+    <string name="by_accepting_acknowledge">By accepting, you acknowledge that you have read and understood all policies and agree to use BilaWoga responsibly for genuine emergency situations only.</string>
+    
+    <!-- MainActivity Strings -->
+    <string name="bilawoga_support">BilaWoga Support</string>
+    <string name="need_help_call_support">Need help? Call our support line: 0712 028 456</string>
+    <string name="call_support">Call Support</string>
+    <string name="emergency_help_center">Emergency Help Center</string>
+    <string name="send_alert">Send Alert</string>
+    <string name="ai_protection">AI Protection</string>
+    <string name="ai_monitoring_active">AI monitoring active for emergency detection</string>
+    <string name="setup_mode_active">🛡️ Setup Mode Active</string>
+    <string name="bilawoga_ready_message">BilaWoga is ready for future emergencies. All features are active and ready to use when needed.</string>
+    <string name="emergency_help_center_kenya">Emergency Help Center (Kenya)</string>
+    <string name="kenya_police">Kenya Police</string>
+    <string name="police_numbers">999 / 112 / 911</string>
+    <string name="police_description">Police control for any life‑threatening emergencies.</string>
+    <string name="ambulance_st_john">Ambulance (St John/Red Cross)</string>
+    <string name="ambulance_number">1199</string>
+    <string name="ambulance_description">Kenya Red Cross ambulance and disaster response dispatch.</string>
+    <string name="gbv_helpline">GBV Helpline</string>
+    <string name="gbv_number">1195</string>
+    <string name="gbv_description">24/7 support for survivors of gender‑based violence.</string>
+    <string name="child_helpline">Child Helpline</string>
+    <string name="child_helpline_number">116</string>
+    <string name="child_helpline_description">Child protection hotline for reporting abuse or missing children.</string>
+    <string name="health_hotline">Health Hotline (MoH)</string>
+    <string name="health_hotline_number">719</string>
+    <string name="health_hotline_description">General medical guidance and referral information.</string>
+    <string name="mental_health_tip">Tip: If you need ongoing mental health care, also add your personal counselor/therapist to Contacts in the app.</string>
+    <string name="open_emergency_help_center">Open Emergency Help Center</string>
+    <string name="send_quick_emergency_alert">Send Quick Emergency Alert</string>
+    <string name="open_accessibility_options">Open Accessibility Options</string>
 
 
 </resources>

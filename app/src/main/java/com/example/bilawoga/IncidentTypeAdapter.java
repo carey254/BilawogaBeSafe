@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.bilawoga.safety.R;
 
 public class IncidentTypeAdapter extends ArrayAdapter<String> {
     private final String[] items;

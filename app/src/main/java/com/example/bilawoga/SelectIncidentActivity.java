@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.bilawoga.safety.R;
 import com.example.bilawoga.utils.SecureStorageManager;
 
 public class SelectIncidentActivity extends AppCompatActivity {
@@ -19,6 +20,10 @@ public class SelectIncidentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // SECURITY: Prevent screenshots and screen recording
+        com.example.bilawoga.utils.ScreenSecurityManager.preventScreenshots(this);
+        
         setContentView(R.layout.activity_select_incident);
 
         incidentSpinner = findViewById(R.id.incidentSpinner);

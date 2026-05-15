@@ -11,7 +11,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import com.example.bilawoga.MainActivity;
-import com.example.bilawoga.R;
+import com.bilawoga.safety.R;
 
 /**
  * Smart notification system for BilaWoga app

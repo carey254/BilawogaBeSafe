@@ -23,15 +23,17 @@
             android:background="@color/colorPrimary">
 
             <TextView
+                android:id="@+id/finalStepTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="✅ Final Step"
+                android:text="Final Step"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:gravity="center"/>
 
             <TextView
+                android:id="@+id/pleaseConfirmAcceptance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Please confirm your acceptance"
@@ -50,6 +52,7 @@
             android:background="#F8F9FA">
 
             <TextView
+                android:id="@+id/step1Indicator"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -59,6 +62,7 @@
                 android:gravity="center"/>
 
             <TextView
+                android:id="@+id/step2Indicator"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -68,6 +72,7 @@
                 android:gravity="center"/>
 
             <TextView
+                android:id="@+id/step3Indicator"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -86,9 +91,10 @@
             android:padding="20dp">
 
             <TextView
+                android:id="@+id/toCompleteSetupText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="📋 To complete your setup, please confirm that you have read and agree to the following:"
+                android:text="To complete your setup, please confirm that you have read and agree to the following:"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:lineSpacingExtra="4dp"
@@ -112,10 +118,11 @@
                     android:layout_marginEnd="12dp"/>
 
                 <TextView
+                    android:id="@+id/privacyCheckboxText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="✅ I have read and understand the Privacy Policy"
+                    android:text="I have read and understand the Privacy Policy"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:lineSpacingExtra="2dp"/>
@@ -139,10 +146,11 @@
                     android:layout_marginEnd="12dp"/>
 
                 <TextView
+                    android:id="@+id/termsCheckboxText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="✅ I have read and agree to the Terms of Use"
+                    android:text="I have read and agree to the Terms of Use"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:lineSpacingExtra="2dp"/>
@@ -166,10 +174,11 @@
                     android:layout_marginEnd="12dp"/>
 
                 <TextView
+                    android:id="@+id/emergencyCheckboxText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="🚨 I understand this app is for emergency use only and I will use it responsibly"
+                    android:text="I understand this app is for emergency use only and I will use it responsibly"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:lineSpacingExtra="2dp"/>
@@ -191,15 +200,17 @@
                     android:padding="16dp">
 
                     <TextView
+                        android:id="@+id/importantNoticeTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="⚠️ Important Notice"
+                        android:text="Important Notice"
                         android:textColor="#E65100"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="8dp"/>
 
                     <TextView
+                        android:id="@+id/importantNoticeText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="By accepting, you acknowledge that you have read and understood all policies and agree to use BilaWoga responsibly for genuine emergency situations only."
@@ -222,7 +233,7 @@
                 android:id="@+id/btnBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="⬅️ Back"
+                android:text="@string/back"
                 android:textAllCaps="false"
                 android:textColor="@color/colorPrimary"
                 android:paddingLeft="16dp"
@@ -239,7 +250,7 @@
                 android:id="@+id/btnAccept"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="✅ I Accept &amp; Continue"
+                android:text="@string/i_accept_continue"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:paddingLeft="16dp"

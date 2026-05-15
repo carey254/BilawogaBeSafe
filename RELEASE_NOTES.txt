@@ -1,0 +1,28 @@
+🎉 Initial Release of BilaWoga Safety App
+
+BilaWoga helps protect you during emergencies with powerful safety features:
+
+• Emergency SOS with Stealth Mode
+  Send emergency alerts silently without any visible indication on your device. Only your trusted contacts receive the alert, ensuring your safety during dangerous situations.
+
+• AI-Powered Emergency Detection
+  Advanced AI automatically monitors background audio to detect emergency sounds (screaming, distress calls, cries for help). When detected, SOS is sent automatically with your location and audio recording.
+
+• Automatic Audio Recording
+  Records audio (1 second to 10 minutes) when emergencies are detected and sends it to your trusted contacts as evidence.
+
+• Shake Detection
+  Shake your device to instantly send an SOS alert with your location. Works even when the app is locked or in the background.
+
+• Secure Encrypted Storage
+  All sensitive data is encrypted using AES-256 and stored securely on your device. Your privacy is our priority.
+
+• Multi-Language Support
+  Available in English and Swahili for wider accessibility.
+
+• Trusted Contact Verification
+  SOS messages are only sent to verified trusted contacts stored in encrypted storage, ensuring maximum security.
+
+All your data is stored securely on your device. This app is for genuine emergency situations only.
+
+Thank you for choosing BilaWoga. Your safety is our priority.

@@ -25,15 +25,35 @@ public class OnboardingManager {
     private SharedPreferences prefs;
     
     public OnboardingManager(Context context) {
-        this.context = context.getApplicationContext();
-        this.prefs = SecureStorageManager.getEncryptedSharedPreferences(context);
+        try {
+            this.context = context.getApplicationContext();
+            this.prefs = SecureStorageManager.getEncryptedSharedPreferences(context);
+            // Fallback to regular SharedPreferences if encrypted fails
+            if (this.prefs == null && context != null) {
+                this.prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+                Log.w(TAG, "Using fallback SharedPreferences for OnboardingManager");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error initializing OnboardingManager: " + e.getMessage(), e);
+            // Use fallback
+            if (context != null) {
+                this.context = context.getApplicationContext();
+                this.prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+            }
+        }
     }
     
     /**
      * Check if user is new and needs onboarding
      */
     public boolean isNewUser() {
-        return !prefs.getBoolean(KEY_ONBOARDING_COMPLETED, false);
+        try {
+            if (prefs == null) return true; // Default to new user if prefs unavailable
+            return !prefs.getBoolean(KEY_ONBOARDING_COMPLETED, false);
+        } catch (Exception e) {
+            Log.e(TAG, "Error checking if new user: " + e.getMessage());
+            return true; // Default to new user on error
+        }
     }
     
     /**

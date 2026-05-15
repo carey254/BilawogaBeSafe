@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="#1976D2"
-                app:title="Emergency Contact Setup"
+                app:title="@string/emergency_contact_setup"
                 app:titleTextColor="@android:color/white"
                 app:navigationIcon="@drawable/arrow_back"
                 app:navigationIconTint="@android:color/white">
@@ -31,7 +31,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
-                    android:text="Review Privacy Policy"
+                    android:text="@string/review_privacy_policy"
                     android:textColor="@android:color/white"
                     android:textSize="14sp"
                     android:paddingEnd="16dp"
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:background="#1565C0"
                 android:padding="8dp"
-                android:text="Please review our Privacy Policy in the menu (⋮)"
+                android:text="@string/please_review_privacy_policy"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
                 android:gravity="center"
@@ -67,13 +67,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="24dp"
+            android:paddingBottom="100dp">
 
             <!-- Header -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Emergency Contact Setup"
+                android:text="@string/emergency_contact_setup"
                 android:textColor="#212121"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -83,7 +84,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Configure your emergency contacts for immediate assistance"
+                android:text="@string/configure_emergency_contacts"
                 android:textColor="#757575"
                 android:textSize="16sp"
                 android:gravity="center"
@@ -109,7 +110,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Security Information"
+                        android:text="@string/security_information"
                         android:textColor="#1976D2"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -118,7 +119,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="All emergency contact information is encrypted and stored securely on your device. This data is accessible only to you and is protected with AES-256 encryption."
+                        android:text="@string/security_info_description"
                         android:textColor="#424242"
                         android:textSize="14sp"
                         android:lineSpacingExtra="4dp"/>
@@ -146,7 +147,7 @@
                     android:id="@+id/nameEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter your full name"
+                    android:hint="@string/enter_your_full_name"
                     android:textColor="#212121"
                     android:textColorHint="#9E9E9E"
                     android:textSize="16sp"
@@ -175,7 +176,7 @@
                     android:id="@+id/numberEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Primary emergency contact number"
+                    android:hint="@string/primary_emergency_contact"
                     android:inputType="phone"
                     android:textColor="#212121"
                     android:textColorHint="#9E9E9E"
@@ -205,7 +206,7 @@
                     android:id="@+id/number2Edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Secondary emergency contact number (optional)"
+                    android:hint="@string/secondary_emergency_contact"
                     android:inputType="phone"
                     android:textColor="#212121"
                     android:textColorHint="#9E9E9E"
@@ -218,7 +219,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Type of Emergency"
+                android:text="@string/type_of_emergency"
                 android:textColor="#212121"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -271,7 +272,7 @@
                     android:id="@+id/manualIncidentEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Describe the type of emergency (if not listed above)"
+                    android:hint="@string/describe_emergency_type"
                     android:minLines="3"
                     android:gravity="top"
                     android:textColor="#212121"
@@ -286,7 +287,7 @@
                 android:id="@+id/submitButton"
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
-                android:text="Save Emergency Contacts"
+                android:text="@string/save_emergency_contacts"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:padding="20dp"
@@ -302,7 +303,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="You can update these contacts at any time from the main screen"
+                android:text="@string/update_contacts_anytime"
                 android:textColor="#757575"
                 android:textSize="14sp"
                 android:gravity="center"

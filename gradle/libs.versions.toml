@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.2"
+agp = "8.12.3"
 
 androidxJunit = "1.2.1"
 core = "1.6.1"
@@ -20,6 +20,7 @@ firebaseCrashlytics = "19.4.4"
 googleGmsGoogleServices = "4.4.3"
 googleFirebaseCrashlytics = "3.0.4"
 materialVersion = "1.12.0"
+biometric = "1.1.0"
 
 [libraries]
 
@@ -39,6 +40,7 @@ shake-detector = { module = "com.github.Lucem-Anb:shake-detector", version.ref =
 monitor = { group = "androidx.test", name = "monitor", version.ref = "monitor" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 google-material = { group = "com.google.android.material", name = "material", version.ref = "materialVersion" }
+biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
